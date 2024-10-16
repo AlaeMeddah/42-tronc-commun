@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeddah <almeddah@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:29:59 by almeddah          #+#    #+#             */
-/*   Updated: 2024/10/16 14:32:32 by almeddah         ###   ########.fr       */
+/*   Updated: 2024/10/16 16:47:56 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ static char	**ft_split2(const char *str, char **result, char sep)
 		if (*str)
 		{
 			result[j] = malloc(sizeof(char) * (i + 1));
+			if (!result[j])
+				return (0);
 			result[j][0] = '\0';
 			ft_strncat(result[j++], str, i);
 			str += i;
@@ -83,6 +85,8 @@ char	**ft_split(char const *s, char c)
 
 	nb_words = count_words(s, c, 0);
 	result = malloc(sizeof(char *) * (nb_words + 1));
+	if (!result)
+		return (0);
 	ft_split2(s, result, c);
 	result[nb_words] = 0;
 	return (result);

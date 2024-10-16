@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeddah <almeddah@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 11:49:18 by almeddah          #+#    #+#             */
-/*   Updated: 2024/10/16 11:48:56 by almeddah         ###   ########.fr       */
+/*   Updated: 2024/10/16 17:35:57 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "stdio.h"
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
@@ -18,18 +19,18 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	size_t	len_s;
 	char	*result;
 
-	i = 0;
 	len_s = ft_strlen(s);
-	if (start > len_s)
+	if (start >= len_s)
 		len = 0;
 	else if (len > len_s - start)
 		len = len_s - start;
-	result = malloc(len + 1);
+	result = malloc(sizeof(char) * (len + 1));
 	if (!result)
-		return (0);
-	while ((s + start)[i] && i < len)
+		return (NULL);
+	i = 0;
+	while (start + i < len_s && i < len)
 	{
-		result[i] = (s + start)[i];
+		result[i] = s[start + i];
 		i++;
 	}
 	result[i] = '\0';

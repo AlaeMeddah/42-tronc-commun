@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeddah <almeddah@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:20:33 by almeddah          #+#    #+#             */
-/*   Updated: 2024/10/14 14:51:55 by almeddah         ###   ########.fr       */
+/*   Updated: 2024/10/16 17:22:39 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ char	*ft_strrchr(const char *s, int c)
 	result = 0;
 	while (*s)
 	{
-		if (*s == c)
+		if (*s == (char)c)
 			result = (char *)s;
 		s++;
 	}
-	if (c == '\0')
+	if ((char)c == '\0')
 		result = (char *)s;
 	return (result);
 }

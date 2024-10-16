@@ -3,21 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeddah <almeddah@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:29:11 by almeddah          #+#    #+#             */
-/*   Updated: 2024/10/14 15:36:28 by almeddah         ###   ########.fr       */
+/*   Updated: 2024/10/16 17:06:32 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*memmove(void *dest, const void *src, size_t n)
+void	*ft_memmove(void *dest, const void *src, size_t n)
 {
 	unsigned char	*dest_;
 	unsigned char	*src_;
 	size_t			i;
 
+	if (dest == NULL && src == NULL)
+		return (NULL);
 	src_ = (unsigned char *)src;
 	dest_ = (unsigned char *)dest;
 	if (dest > src)
