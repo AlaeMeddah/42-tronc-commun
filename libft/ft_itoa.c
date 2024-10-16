@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 11:43:41 by almeddah          #+#    #+#             */
-/*   Updated: 2024/10/16 13:24:27 by almeddah         ###   ########.fr       */
+/*   Updated: 2024/10/16 14:30:18 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@ static char	*ft_strcat_char(char *dest, char c)
 
 static void	itoa_2(int nbr, int size, char **result)
 {
-	int	i;
-
 	if (nbr == -2147483648)
 	{
 		itoa_2(nbr / 10, size + 1, result);

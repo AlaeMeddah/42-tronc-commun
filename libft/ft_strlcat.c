@@ -6,13 +6,13 @@
 /*   By: almeddah <almeddah@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 14:30:17 by almeddah          #+#    #+#             */
-/*   Updated: 2024/10/14 14:37:35 by almeddah         ###   ########.fr       */
+/*   Updated: 2024/10/16 14:28:30 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	strlcat(char *dst, const char *src, size_t size)
+size_t	ft_strlcat(char *dst, const char *src, size_t size)
 {
 	size_t	len_src;
 	size_t	len_dest;

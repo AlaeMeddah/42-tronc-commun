@@ -6,13 +6,13 @@
 /*   By: almeddah <almeddah@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:29:59 by almeddah          #+#    #+#             */
-/*   Updated: 2024/10/16 12:25:22 by almeddah         ###   ########.fr       */
+/*   Updated: 2024/10/16 14:32:32 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static char	*ft_strncat(char *dest, char *src, unsigned int nb)
+static char	*ft_strncat(char *dest, const char *src, unsigned int nb)
 {
 	unsigned int	i;
 	unsigned int	j;
@@ -37,7 +37,7 @@ static int	is_sep(char c, char sep)
 	return (0);
 }
 
-static int	count_words(char *str, char sep, int n)
+static int	count_words(const char *str, char sep, int n)
 {
 	while (is_sep(*str, sep) && *str)
 		str++;
@@ -52,7 +52,7 @@ static int	count_words(char *str, char sep, int n)
 	return (n);
 }
 
-static char	**ft_split2(char *str, char **result, char sep)
+static char	**ft_split2(const char *str, char **result, char sep)
 {
 	int	i;
 	int	j;
@@ -78,8 +78,8 @@ static char	**ft_split2(char *str, char **result, char sep)
 
 char	**ft_split(char const *s, char c)
 {
-	int nb_words;
-	char **result;
+	int		nb_words;
+	char	**result;
 
 	nb_words = count_words(s, c, 0);
 	result = malloc(sizeof(char *) * (nb_words + 1));

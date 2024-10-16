@@ -6,13 +6,13 @@
 /*   By: almeddah <almeddah@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:56:34 by almeddah          #+#    #+#             */
-/*   Updated: 2024/10/14 15:58:03 by almeddah         ###   ########.fr       */
+/*   Updated: 2024/10/16 14:39:13 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	bzero(void *s, size_t n)
+void	ft_bzero(void *s, size_t n)
 {
 	unsigned char	*s_;
 	size_t			i;
@@ -21,8 +21,7 @@ void	bzero(void *s, size_t n)
 	s_ = (unsigned char *)s;
 	while (i < n)
 	{
-		s_[i] = '0';
+		s_[i] = '\0';
 		i++;
 	}
-	return (s);
 }
