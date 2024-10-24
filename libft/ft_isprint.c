@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:11:09 by almeddah          #+#    #+#             */
-/*   Updated: 2024/10/17 12:37:15 by almeddah         ###   ########.fr       */
+/*   Updated: 2024/10/24 15:40:24 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_isprint(int c)
 {
-	if (c < 32 || c > 126)
+	if (c < ' ' || c > '~')
 		return (0);
 	return (1);
 }

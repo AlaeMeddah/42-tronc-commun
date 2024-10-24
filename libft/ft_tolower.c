@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:06:10 by almeddah          #+#    #+#             */
-/*   Updated: 2024/10/17 12:38:20 by almeddah         ###   ########.fr       */
+/*   Updated: 2024/10/24 15:50:20 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,6 @@
 int	ft_tolower(int c)
 {
 	if (c >= 'A' && c <= 'Z')
-		return (c + 32);
+		return (c + ('a' - 'A'));
 	return (c);
 }

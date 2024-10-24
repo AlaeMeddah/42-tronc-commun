@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:29:59 by almeddah          #+#    #+#             */
-/*   Updated: 2024/10/17 12:37:58 by almeddah         ###   ########.fr       */
+/*   Updated: 2024/10/24 15:51:17 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,11 @@ static int	is_sep(char c, char sep)
 	return (0);
 }
 
-static int	count_words(const char *str, char sep, int n)
+static int	count_words(const char *str, char sep)
 {
+	int	n;
+
+	n = 0;
 	while (is_sep(*str, sep) && *str)
 		str++;
 	while (*str)
@@ -83,7 +86,7 @@ char	**ft_split(char const *s, char c)
 	int		nb_words;
 	char	**result;
 
-	nb_words = count_words(s, c, 0);
+	nb_words = count_words(s, c);
 	result = malloc(sizeof(char *) * (nb_words + 1));
 	if (!result)
 		return (0);

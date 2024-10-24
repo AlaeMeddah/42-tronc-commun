@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 14:36:26 by almeddah          #+#    #+#             */
-/*   Updated: 2024/10/22 15:25:37 by almeddah         ###   ########.fr       */
+/*   Updated: 2024/10/24 15:39:10 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,9 @@
 
 void	ft_lstdelone(t_list *lst, void (*del)(void *))
 {
-	if (lst && del)
+	if (lst)
 	{
-		if (lst->content)
-			del(lst->content);
+		del(lst->content);
 		free(lst);
 	}
 }
