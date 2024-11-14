@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ameddah <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 18:22:22 by ameddah           #+#    #+#             */
-/*   Updated: 2024/03/08 16:34:11 by ameddah          ###   ########.fr       */
+/*   Updated: 2024/11/14 10:16:53 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,33 +132,24 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-// int main(void)
+// int	main(void)
 // {
-//     int fd;  // File descriptor
+// 	int		fd;
+// 	char	*line;
 
-//     // Replace "your_file.txt" with the path to the file you want to read
-//     fd = open("read_error.txt", O_RDONLY);
-//     if (fd == -1)
-//     {
-//         perror("Error opening file");
-//         return 1;
-//     }
-
-//     char *line;
-
-//     // Read lines until the end of the file
-//     while ((line = get_next_line(fd)) != NULL)
-//     {
-//         // Print the line to the standard output
-//         printf("%s", line);
-
-//         // Free the memory allocated for the line
-//         free(line);
-//     }
-//     printf("%s", get_next_line(fd));
-
-//     // Close the file descriptor
-//     close(fd);
-
-//     return 0;
+// 	// fd = STDIN_FILENO;
+// 	fd = open("read_error.txt", O_RDONLY);
+// 	if (fd == -1)
+// 	{
+// 		perror("Error opening file");
+// 		return (1);
+// 	}
+// 	while ((line = get_next_line(fd)) != NULL)
+// 	{
+// 		printf("%s", line);
+// 		free(line);
+// 	}
+// 	printf("%s", get_next_line(fd));
+// 	close(fd);
+// 	return (0);
 // }
