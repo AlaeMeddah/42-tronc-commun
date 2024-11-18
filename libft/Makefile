@@ -22,7 +22,7 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	ar rcs $(NAME) $(OBJS)
 
-bonus: $(BONUS_OBJS)
+bonus: $(NAME) $(BONUS_OBJS)
 	ar rcs $(NAME) $(BONUS_OBJS)
 
 %.o: %.c
