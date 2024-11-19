@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 18:30:44 by ameddah           #+#    #+#             */
-/*   Updated: 2024/11/18 17:48:27 by almeddah         ###   ########.fr       */
+/*   Updated: 2024/11/19 18:04:18 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,11 @@ int	ft_print_char(int c)
 	return (1);
 }
 
-int	ft_padding(t_flags flags, int len)
+int	ft_padding(t_flags flags, int len, char c)
 {
-	int		i;
-	char	c;
+	int	i;
 
 	i = 0;
-	c = ' ';
-	// if (flags.zero_padded == 1)
-	// 	c = '0';
 	while (len + i < flags.min_width)
 		i += ft_print_char(c);
 	return (i);
@@ -38,10 +34,10 @@ int	ft_print_char_flags(int c, t_flags flags)
 
 	i = 0;
 	if (flags.min_width > 1 && !flags.left_justify)
-		i += ft_padding(flags, 1);
-	write(1, &c, 1);
+		i += ft_padding(flags, 1, ' ');
+	i += ft_print_char(c);
 	if (flags.min_width > 1 && flags.left_justify)
-		i += ft_padding(flags, 1);
+		i += ft_padding(flags, 1, ' ');
 	return (i);
 }
 
@@ -75,7 +71,7 @@ int	ft_print_str_flags(char *str, t_flags flags)
 	if (flags.precision == -1)
 		flags.precision = len;
 	if (flags.min_width > len && !flags.left_justify)
-		i += ft_padding(flags, len);
+		i += ft_padding(flags, len, ' ');
 	y = 0;
 	while (str[y] && y < flags.precision)
 	{
@@ -83,7 +79,7 @@ int	ft_print_str_flags(char *str, t_flags flags)
 		y++;
 	}
 	if (flags.min_width > len && flags.left_justify)
-		i += ft_padding(flags, len);
+		i += ft_padding(flags, len, ' ');
 	return (i + y);
 }
 
@@ -93,18 +89,17 @@ int	ft_eval_format(va_list args, t_flags flags)
 
 	nb_char = 0;
 	if (flags.format_identifier == 'c')
-		nb_char += ft_print_char(va_arg(args, int));
+		nb_char += ft_print_char_flags(va_arg(args, int), flags);
 	else if (flags.format_identifier == 's')
 		nb_char += ft_print_str_flags(va_arg(args, char *), flags);
 	else if (flags.format_identifier == 'p')
 		nb_char += ft_print_ptr(va_arg(args, unsigned long long), flags);
 	else if (flags.format_identifier == 'd' || flags.format_identifier == 'i')
-		nb_char += ft_print_nbr(va_arg(args, int));
+		nb_char += ft_print_nbr(va_arg(args, int), flags);
 	else if (flags.format_identifier == 'u')
-		nb_char += ft_print_unsigned(va_arg(args, unsigned int));
+		nb_char += ft_print_unsigned(va_arg(args, unsigned int), flags);
 	else if (flags.format_identifier == 'x' || flags.format_identifier == 'X')
-		nb_char += ft_print_hex(va_arg(args, unsigned int),
-				flags.format_identifier);
+		nb_char += ft_print_hex(va_arg(args, unsigned int), flags);
 	else if (flags.format_identifier == '%')
 		nb_char += ft_print_char('%');
 	return (nb_char);
@@ -138,16 +133,20 @@ int	ft_printf(const char *format, ...)
 
 // int	main(void)
 // {
-// 	int	x;
-
-// 	x = 42;
-// 	ft_printf("%p\n", &x);
-// 	ft_printf("%20p\n", &x);
-// 	ft_printf("%-20p\n", &x);
-// 	ft_printf("%-20p\n", NULL);
-// 	printf("%p\n", &x);
-// 	printf("%20p\n", &x);
-// 	printf("%-20p\n", &x);
-// 	printf("%-20p\n", NULL);
+// 	ft_printf("%.0i\n", 0);
+// 	ft_printf("%.i\n", 0);
+// 	ft_printf("%5.0i\n", 0);
+// 	ft_printf("%5.i\n", 0);
+// 	ft_printf("%-5.0i\n", 0);
+// 	ft_printf("%-5.i\n", 0);
+// 	ft_printf("%.0d\n", 0);
+// 	ft_printf("%.d\n", 0);
+// 	ft_printf("%5.0d\n", 0);
+// 	ft_printf("%5.d\n", 0);
+// 	ft_printf("%-5.0d\n", 0);
+// 	ft_printf("%-5.d\n", 0);
+// 	ft_printf("%.0u\n", 0);
+// 	ft_printf("%.u\n", 0);
+// 	ft_printf("%5.0u\n", 0);
 // 	return (0);
 // }

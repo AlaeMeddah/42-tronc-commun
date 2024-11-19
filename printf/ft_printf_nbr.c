@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 18:30:35 by ameddah           #+#    #+#             */
-/*   Updated: 2024/11/18 16:48:58 by almeddah         ###   ########.fr       */
+/*   Updated: 2024/11/19 18:09:45 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,14 +64,66 @@
 // 	return (str);
 // }
 
-int	ft_print_nbr(int n)
+char	*ft_flags_sign_space(char *num, t_flags flags)
+{
+	char	*result;
+
+	if ((flags.sign || flags.space) && *num != '-')
+	{
+		if (flags.sign)
+		{
+			result = ft_strjoin("+", num);
+			free(num);
+		}
+		else
+		{
+			result = ft_strjoin(" ", num);
+			free(num);
+		}
+	}
+	else
+		result = num;
+	return (result);
+}
+
+int	ft_print_nbr(int n, t_flags flags)
 {
 	int		i;
+	int		j;
+	int		y;
+	int		len;
 	char	*num;
 
 	i = 0;
-	num = ft_itoa(n);
-	i = ft_print_str(num);
+	j = 0;
+	y = 0;
+	num = ft_flags_sign_space(ft_itoa(n), flags);
+	// printf("%s\n", ft_itoa(n));
+	// printf("%s\n", num);
+	len = ft_strlen(num);
+	if (flags.precision >= len)
+	{
+		if (*num == '-' || *num == '+' || *num == ' ')
+			flags.precision += 1;
+		y = flags.precision - len;
+		len = flags.precision;
+	}
+	if (flags.min_width > len && !flags.left_justify && !(flags.zero_padded
+			&& flags.precision == -1))
+		i += ft_padding(flags, len, ' ');
+	if (*num == '-' || *num == '+' || *num == ' ')
+	{
+		i = +ft_print_char(*num);
+		j = 1;
+	}
+	if (flags.min_width > len && !flags.left_justify && flags.zero_padded
+		&& flags.precision == -1)
+		i += ft_padding(flags, len, '0');
+	while (y-- != 0)
+		i += ft_print_char('0');
+	i += ft_print_str(num + j);
+	if (flags.min_width > len && flags.left_justify)
+		i += ft_padding(flags, len, ' ');
 	free(num);
 	return (i);
 }

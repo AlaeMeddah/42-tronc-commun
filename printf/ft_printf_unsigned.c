@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf_unsigned.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ameddah <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 18:30:41 by ameddah           #+#    #+#             */
-/*   Updated: 2024/03/05 18:30:54 by ameddah          ###   ########.fr       */
+/*   Updated: 2024/11/19 18:08:08 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,11 @@ static char	*ft_uitoa(unsigned int n)
 	unsigned long	nb;
 	char			*str;
 
-	size = count_size_((unsigned long) n);
-	str = (char *) malloc(sizeof(char) * (size + 1));
+	size = count_size_((unsigned long)n);
+	str = (char *)malloc(sizeof(char) * (size + 1));
 	if (str == NULL)
 		return (NULL);
-	nb = (unsigned long) n;
+	nb = (unsigned long)n;
 	str[size] = '\0';
 	while (size > 0)
 	{
@@ -51,14 +51,34 @@ static char	*ft_uitoa(unsigned int n)
 	return (str);
 }
 
-int	ft_print_unsigned(unsigned int n)
+int	ft_print_unsigned(unsigned int n, t_flags flags)
 {
 	int		i;
+	int		y;
+	int		len;
 	char	*num;
 
 	i = 0;
+	y = 0;
 	num = ft_uitoa(n);
-	i = ft_print_str(num);
+	len = ft_strlen(num);
+	if (flags.precision > len)
+	{
+		y = flags.precision - len;
+		len = flags.precision;
+	}
+	if (flags.min_width > len && !flags.left_justify)
+	{
+		if (flags.zero_padded && flags.precision == -1)
+			i += ft_padding(flags, len, '0');
+		else
+			i += ft_padding(flags, len, ' ');
+	}
+	while (y-- != 0)
+		i += ft_print_char('0');
+	i += ft_print_str(num);
+	if (flags.min_width > len && flags.left_justify)
+		i += ft_padding(flags, len, ' ');
 	free(num);
 	return (i);
 }
