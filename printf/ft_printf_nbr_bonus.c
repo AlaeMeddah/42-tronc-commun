@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf_nbr.c                                    :+:      :+:    :+:   */
+/*   ft_printf_nbr_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 18:30:35 by ameddah           #+#    #+#             */
-/*   Updated: 2024/11/21 17:27:55 by almeddah         ###   ########.fr       */
+/*   Updated: 2024/11/21 18:12:53 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "ft_printf_bonus.h"
 
 static char	*ft_flags_sign_space(char *num, t_flags flags)
 {

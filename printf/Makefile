@@ -1,9 +1,9 @@
 NAME = libftprintf.a
 
-SRCS =	ft_printf.c ft_printf_hex.c ft_printf_nbr.c ft_printf_unsigned.c ft_printf_flags.c
+SRCS =	ft_printf.c ft_printf_hex.c ft_printf_nbr.c ft_printf_str.c ft_printf_unsigned.c ft_printf_flags.c
 OBJS = $(SRCS:.c=.o)
 
-BONUS = ft_printf_bonus.c ft_printf_hex_bonus.c ft_printf_nbr_bonus.c ft_printf_unsigned_bonus.c ft_printf_flags_bonus.c
+BONUS = ft_printf_bonus.c ft_printf_hex_bonus.c ft_printf_nbr_bonus.c ft_printf_str_bonus.c ft_printf_unsigned_bonus.c ft_printf_flags_bonus.c
 BONUS_OBJS = $(BONUS:.c=.o)
 
 LIBFT_DIR = libft

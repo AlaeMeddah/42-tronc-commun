@@ -6,29 +6,11 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:29:59 by almeddah          #+#    #+#             */
-/*   Updated: 2024/10/24 15:51:17 by almeddah         ###   ########.fr       */
+/*   Updated: 2024/11/21 18:07:53 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
-static char	*ft_strncat(char *dest, const char *src, unsigned int nb)
-{
-	unsigned int	i;
-	unsigned int	j;
-
-	i = 0;
-	j = 0;
-	while (dest[i])
-		i++;
-	while (src[j] && j < nb)
-	{
-		dest[i + j] = src[j];
-		j++;
-	}
-	dest[i + j] = '\0';
-	return (dest);
-}
 
 static int	is_sep(char c, char sep)
 {
