@@ -179,7 +179,7 @@ int	loop_hook(t_data *data)
 {
 	if (data->quit)
 	{
-		cleanup(data);
+		mlx_loop_end(data->mlx_ptr);
 		return (0);
 	}
 	return (1);
@@ -203,6 +203,7 @@ int	main(void)
 	mlx_key_hook(data.win_ptr, key_handler, &data);
 	mlx_loop_hook(data.mlx_ptr, loop_hook, &data);
 	mlx_loop(data.mlx_ptr);
+	cleanup(&data);
 	free_map(data.map, data.height);
 	return (0);
 }
