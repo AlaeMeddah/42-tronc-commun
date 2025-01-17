@@ -54,7 +54,7 @@ int	set_img(t_data *data)
 	if (!data->img_wall || !data->img_floor || !data->img_chest
 		|| !data->img_exit || !data->img_player)
 	{
-		write(2, "Error: Unable to load tile images\n", 34);
+		printf("Error : Unable to load images\n");
 		return (0);
 	}
 	return (1);
@@ -68,6 +68,7 @@ void	set_data(t_data *data)
 	data->player.content = '\0';
 	data->exit.content = '\0';
 	data->chests = 0;
+	data->mooves = 0;
 	data->quit = 0;
 }
 
@@ -81,13 +82,22 @@ void	moove_down(t_data *data)
 {
 	if (data->map[data->player.y + 1][data->player.x].content != '1')
 	{
-		if (data->map[data->player.y + 1][data->player.x].content == 'E'
-			&& data->chests > 0)
+		if (data->map[data->player.y + 1][data->player.x].content == 'E')
+		{
+			if (data->chests == 0)
+			{
+				data->mooves++;
+				printf("Jeu terminé en %d déplacements\n", data->mooves);
+				data->quit = 1;
+			}
 			return ;
+		}
 		if (data->map[data->player.y + 1][data->player.x].content == 'C')
 			data->chests--;
 		data->map[data->player.y][data->player.x].content = '0';
 		data->player.y++;
+		data->mooves++;
+		printf("Nombre de déplacements : %d\n", data->mooves);
 		data->map[data->player.y][data->player.x].content = 'P';
 	}
 	draw_grid(data);
@@ -97,13 +107,22 @@ void	moove_up(t_data *data)
 {
 	if (data->map[data->player.y - 1][data->player.x].content != '1')
 	{
-		if (data->map[data->player.y - 1][data->player.x].content == 'E'
-			&& data->chests > 0)
+		if (data->map[data->player.y - 1][data->player.x].content == 'E')
+		{
+			if (data->chests == 0)
+			{
+				data->mooves++;
+				printf("Jeu terminé en %d déplacements\n", data->mooves);
+				data->quit = 1;
+			}
 			return ;
+		}
 		if (data->map[data->player.y - 1][data->player.x].content == 'C')
 			data->chests--;
 		data->map[data->player.y][data->player.x].content = '0';
 		data->player.y--;
+		data->mooves++;
+		printf("Nombre de déplacements : %d\n", data->mooves);
 		data->map[data->player.y][data->player.x].content = 'P';
 	}
 	draw_grid(data);
@@ -113,13 +132,22 @@ void	moove_left(t_data *data)
 {
 	if (data->map[data->player.y][data->player.x - 1].content != '1')
 	{
-		if (data->map[data->player.y][data->player.x - 1].content == 'E'
-			&& data->chests > 0)
+		if (data->map[data->player.y][data->player.x - 1].content == 'E')
+		{
+			if (data->chests == 0)
+			{
+				data->mooves++;
+				printf("Jeu terminé en %d déplacements\n", data->mooves);
+				data->quit = 1;
+			}
 			return ;
+		}
 		if (data->map[data->player.y][data->player.x - 1].content == 'C')
 			data->chests--;
 		data->map[data->player.y][data->player.x].content = '0';
 		data->player.x--;
+		data->mooves++;
+		printf("Nombre de déplacements : %d\n", data->mooves);
 		data->map[data->player.y][data->player.x].content = 'P';
 	}
 	draw_grid(data);
@@ -129,13 +157,22 @@ void	moove_right(t_data *data)
 {
 	if (data->map[data->player.y][data->player.x + 1].content != '1')
 	{
-		if (data->map[data->player.y][data->player.x + 1].content == 'E'
-			&& data->chests > 0)
+		if (data->map[data->player.y - 1][data->player.x + 1].content == 'E')
+		{
+			if (data->chests == 0)
+			{
+				data->mooves++;
+				printf("Jeu terminé en %d déplacements\n", data->mooves);
+				data->quit = 1;
+			}
 			return ;
+		}
 		if (data->map[data->player.y][data->player.x + 1].content == 'C')
 			data->chests--;
 		data->map[data->player.y][data->player.x].content = '0';
 		data->player.x++;
+		data->mooves++;
+		printf("Nombre de déplacements : %d\n", data->mooves);
 		data->map[data->player.y][data->player.x].content = 'P';
 	}
 	draw_grid(data);
@@ -185,25 +222,75 @@ int	loop_hook(t_data *data)
 	return (1);
 }
 
-int	main(void)
+char	*ft_strrchr(const char *s, int c)
+{
+	char	*result;
+
+	result = 0;
+	while (*s)
+	{
+		if (*s == (char)c)
+			result = (char *)s;
+		s++;
+	}
+	if ((char)c == '\0')
+		result = (char *)s;
+	return (result);
+}
+
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	if (!n)
+		return (0);
+	while (s1[i] && i < n - 1)
+	{
+		if (s1[i] != s2[i])
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		i++;
+	}
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+}
+
+int	check_extension(char *map_file)
+{
+	char	*extension;
+
+	extension = ft_strrchr(map_file, '.');
+	if (!extension || ft_strncmp(extension, ".ber", 4) != 0)
+	{
+		printf("Error : map file must have a '.ber' extension\n");
+		return (0);
+	}
+	return (1);
+}
+
+int	main(int arcg, char **argv)
 {
 	t_data	data;
 
-	set_data(&data);
-	if (!map("carte/carte.ber", &data))
+	if (arcg != 2)
+		printf("Error : wrong number of arguments\n");
+	if (arcg != 2 || !check_extension(argv[1]))
 		return (0);
-	if (!data.map)
+	set_data(&data);
+	if (!map(argv[1], &data))
 		return (0);
 	data.mlx_ptr = mlx_init();
-	if (!set_img(&data))
-		return (0);
-	data.win_ptr = mlx_new_window(data.mlx_ptr, data.width * data.img_width,
-			data.height * data.img_height, "So_long");
-	mlx_expose_hook(data.win_ptr, handle_expose, &data);
-	mlx_key_hook(data.win_ptr, key_handler, &data);
-	mlx_loop_hook(data.mlx_ptr, loop_hook, &data);
-	mlx_loop(data.mlx_ptr);
-	cleanup(&data);
+	if (!data.mlx_ptr)
+		printf("Error : mlx_init failed\n");
+	if (data.mlx_ptr && set_img(&data))
+	{
+		data.win_ptr = mlx_new_window(data.mlx_ptr, data.width * data.img_width,
+				data.height * data.img_height, "So_long");
+		mlx_expose_hook(data.win_ptr, handle_expose, &data);
+		mlx_key_hook(data.win_ptr, key_handler, &data);
+		mlx_loop_hook(data.mlx_ptr, loop_hook, &data);
+		mlx_loop(data.mlx_ptr);
+		cleanup(&data);
+	}
 	free_map(data.map, data.height);
 	return (0);
 }

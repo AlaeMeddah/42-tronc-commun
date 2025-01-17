@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 13:24:21 by alae              #+#    #+#             */
-/*   Updated: 2025/01/16 20:09:10 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/01/17 14:15:48 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_data
 	void	*img_player;
 	void	*img_chest;
 	void	*img_exit;
+	int		mooves;
 	int		quit;
 }			t_data;
 int			map(char *map_file, t_data *data);
