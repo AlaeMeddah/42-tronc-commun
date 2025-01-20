@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 14:21:01 by almeddah          #+#    #+#             */
-/*   Updated: 2025/01/20 19:03:53 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/01/20 19:06:38 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,6 @@
 int	handle_close(t_data *data)
 {
 	data->quit = 1;
-	return (0);
-}
-
-int	handle_expose(t_data *data)
-{
-	draw_grid(data);
 	return (0);
 }
 

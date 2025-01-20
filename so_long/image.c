@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 18:21:44 by almeddah          #+#    #+#             */
-/*   Updated: 2025/01/20 19:03:53 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/01/20 19:06:07 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,10 @@ void	draw_grid(t_data *data)
 				put_image_to_window(data, x, y, data->img_exit);
 		}
 	}
+}
+
+int	handle_expose(t_data *data)
+{
+	draw_grid(data);
+	return (0);
 }

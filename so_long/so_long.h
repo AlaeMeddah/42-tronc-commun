@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 13:24:21 by alae              #+#    #+#             */
-/*   Updated: 2025/01/20 19:03:53 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/01/20 19:06:28 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void		free_map(t_map **map, int y);
 int			key_handler(int keycode, t_data *data);
 int			set_img(t_data *data);
 void		set_data(t_data *data);
+int			handle_expose(t_data *data);
 void		draw_grid(t_data *data);
 void		put_image_to_window(t_data *data, int x, int y, void *img);
 int			check_feasable(t_map *location, int *chests, int *exit,
