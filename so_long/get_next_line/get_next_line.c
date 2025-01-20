@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ameddah <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 18:22:22 by ameddah           #+#    #+#             */
-/*   Updated: 2024/05/20 16:56:52 by ameddah          ###   ########.fr       */
+/*   Updated: 2025/01/17 14:25:05 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	read_stash(int fd, t_list **stash, int *readed)
 		if (buffer == NULL)
 			return ;
 		*readed = read(fd, buffer, BUFFER_SIZE);
-		if ((!(*stash) && !(*readed)) || *readed <= 0)
+		if ((!(*stash) && !(*readed)) || *readed < 0)
 		{
 			free(buffer);
 			return ;
@@ -106,50 +106,59 @@ void	extract_line(t_list *stash, char **line)
 
 char	*get_next_line(int fd)
 {
-	static t_list	*stash = NULL;
+	static t_list	*stash[1024];
 	char			*line;
 	int				readed;
 
 	readed = -1;
 	if (fd >= 0 && BUFFER_SIZE > 0)
-		read_stash(fd, &stash, &readed);
-	if (!stash || readed < 0)
+		read_stash(fd, &stash[fd], &readed);
+	if (!stash[fd] || readed < 0)
 	{
-		if (stash != NULL)
-			free_stash(stash);
-		stash = NULL;
+		if (stash[fd] != NULL)
+			free_stash(stash[fd]);
+		stash[fd] = NULL;
 		return (NULL);
 	}
-	extract_line(stash, &line);
-	clean_stash(&stash);
+	extract_line(stash[fd], &line);
+	clean_stash(&stash[fd]);
 	if (line[0] == '\0')
 	{
-		free_stash(stash);
-		stash = NULL;
+		free_stash(stash[fd]);
+		stash[fd] = NULL;
 		free(line);
 		return (NULL);
 	}
 	return (line);
 }
 
-int main(void)
-{
-    int fd;
-    fd = open("carte.ber", O_RDONLY);
-    if (fd == -1)
-    {
-        perror("Error opening file");
-        return 1;
-    }
+// int main(void)
+// {
+//     int fd;  // File descriptor
 
-    char *line;
-    while ((line = get_next_line(fd)) != NULL)
-    {
-        printf("%s", line);
-        free(line);
-    }
-    printf("%s", get_next_line(fd));
-    close(fd);
+//     // Replace "your_file.txt" with the path to the file you want to read
+//     fd = open("read_error.txt", O_RDONLY);
+//     if (fd == -1)
+//     {
+//         perror("Error opening file");
+//         return (1);
+//     }
 
-    return 0;
-}
+//     char *line;
+
+//     // Read lines until the end of the file
+//     while ((line = get_next_line(fd)) != NULL)
+//     {
+//         // Print the line to the standard output
+//         printf("%s", line);
+
+//         // Free the memory allocated for the line
+//         free(line);
+//     }
+//     printf("%s", get_next_line(fd));
+
+//     // Close the file descriptor
+//     close(fd);
+
+//     return (0);
+// }

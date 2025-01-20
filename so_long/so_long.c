@@ -1,41 +1,53 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   so_long.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/17 14:21:01 by almeddah          #+#    #+#             */
+/*   Updated: 2025/01/20 18:10:58 by almeddah         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
 #include <unistd.h>
 
+void	put_image_to_window(t_data *data, int x, int y, void *img)
+{
+	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, img, data->map[y][x].x
+		* data->img_width, data->map[y][x].y * data->img_height);
+}
+
 void	draw_grid(t_data *data)
 {
-	int i, j;
-	for (i = 0; i < data->height; i++)
+	int	x;
+	int	y;
+
+	y = -1;
+	while (++y < data->height)
 	{
-		for (j = 0; j < data->width; j++)
+		x = -1;
+		while (++x < data->width)
 		{
-			if (data->map[i][j].content == '1')
-				mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
-					data->img_wall, data->map[i][j].x * data->img_width,
-					data->map[i][j].y * data->img_height);
-			else if (data->map[i][j].content == '0')
-				mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
-					data->img_floor, data->map[i][j].x * data->img_width,
-					data->map[i][j].y * data->img_height);
-			else if (data->map[i][j].content == 'P')
-				mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
-					data->img_player, data->map[i][j].x * data->img_width,
-					data->map[i][j].y * data->img_height);
-			else if (data->map[i][j].content == 'C')
-				mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
-					data->img_chest, data->map[i][j].x * data->img_width,
-					data->map[i][j].y * data->img_height);
-			else if (data->map[i][j].content == 'E')
-				mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
-					data->img_exit, data->map[i][j].x * data->img_width,
-					data->map[i][j].y * data->img_height);
+			if (data->map[y][x].content == '1')
+				put_image_to_window(data, x, y, data->img_wall);
+			else if (data->map[y][x].content == '0')
+				put_image_to_window(data, x, y, data->img_floor);
+			else if (data->map[y][x].content == 'P')
+				put_image_to_window(data, x, y, data->img_player);
+			else if (data->map[y][x].content == 'C')
+				put_image_to_window(data, x, y, data->img_chest);
+			else if (data->map[y][x].content == 'E')
+				put_image_to_window(data, x, y, data->img_exit);
 		}
 	}
 }
 
 int	set_img(t_data *data)
 {
-	// data->img_height = 80;
-	// data->img_width = 80;
+	data->img_height = 80;
+	data->img_width = 80;
 	data->floor_file = "texture/floor.xpm";
 	data->wall_file = "texture/wall.xpm";
 	data->chest_file = "texture/chest.xpm";
@@ -157,7 +169,7 @@ void	moove_right(t_data *data)
 {
 	if (data->map[data->player.y][data->player.x + 1].content != '1')
 	{
-		if (data->map[data->player.y - 1][data->player.x + 1].content == 'E')
+		if (data->map[data->player.y][data->player.x + 1].content == 'E')
 		{
 			if (data->chests == 0)
 			{
@@ -176,6 +188,12 @@ void	moove_right(t_data *data)
 		data->map[data->player.y][data->player.x].content = 'P';
 	}
 	draw_grid(data);
+}
+
+int	handle_close(t_data *data)
+{
+	data->quit = 1;
+	return (0);
 }
 
 int	key_handler(int keycode, t_data *data)
@@ -287,6 +305,7 @@ int	main(int arcg, char **argv)
 				data.height * data.img_height, "So_long");
 		mlx_expose_hook(data.win_ptr, handle_expose, &data);
 		mlx_key_hook(data.win_ptr, key_handler, &data);
+		mlx_hook(data.win_ptr, 17, 0, handle_close, &data);
 		mlx_loop_hook(data.mlx_ptr, loop_hook, &data);
 		mlx_loop(data.mlx_ptr);
 		cleanup(&data);
