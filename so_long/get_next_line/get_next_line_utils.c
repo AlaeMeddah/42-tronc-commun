@@ -1,28 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ameddah <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 23:59:35 by ameddah           #+#    #+#             */
-/*   Updated: 2024/03/06 17:43:24 by ameddah          ###   ########.fr       */
+/*   Updated: 2025/01/20 18:40:13 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *s)
-{
-	size_t	len;
+// size_t	ft_strlen(const char *s)
+// {
+// 	size_t	len;
 
-	len = 0;
-	while (s[len] != '\0')
-	{
-		len++;
-	}
-	return (len);
-}
+// 	len = 0;
+// 	while (s[len] != '\0')
+// 	{
+// 		len++;
+// 	}
+// 	return (len);
+// }
 
 t_list	*ft_lst_get_last(t_list *stash)
 {
@@ -95,8 +95,8 @@ void	clean_stash(t_list **stash)
 		i++;
 	if (last->content && last->content[i] == '\n')
 		i++;
-	clean_node->content = malloc(sizeof(char)
-			* ((ft_strlen(last->content) - i) + 1));
+	clean_node->content = malloc(sizeof(char) * ((ft_strlen(last->content) - i)
+				+ 1));
 	if (clean_node->content == NULL)
 		return ;
 	j = 0;
