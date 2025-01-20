@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 14:21:01 by almeddah          #+#    #+#             */
-/*   Updated: 2025/01/20 18:51:50 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/01/20 19:03:53 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,37 +18,40 @@ int	handle_close(t_data *data)
 	return (0);
 }
 
-// char	*ft_strrchr(const char *s, int c)
-// {
-// 	char	*result;
+int	handle_expose(t_data *data)
+{
+	draw_grid(data);
+	return (0);
+}
 
-// 	result = 0;
-// 	while (*s)
-// 	{
-// 		if (*s == (char)c)
-// 			result = (char *)s;
-// 		s++;
-// 	}
-// 	if ((char)c == '\0')
-// 		result = (char *)s;
-// 	return (result);
-// }
+void	cleanup(t_data *data)
+{
+	if (data->img_wall)
+		mlx_destroy_image(data->mlx_ptr, data->img_wall);
+	if (data->img_floor)
+		mlx_destroy_image(data->mlx_ptr, data->img_floor);
+	if (data->img_exit)
+		mlx_destroy_image(data->mlx_ptr, data->img_exit);
+	if (data->img_chest)
+		mlx_destroy_image(data->mlx_ptr, data->img_chest);
+	if (data->img_player)
+		mlx_destroy_image(data->mlx_ptr, data->img_player);
+	if (data->win_ptr)
+		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
+	if (data->mlx_ptr)
+		mlx_destroy_display(data->mlx_ptr);
+	free(data->mlx_ptr);
+}
 
-// int	ft_strncmp(const char *s1, const char *s2, size_t n)
-// {
-// 	size_t	i;
-
-// 	i = 0;
-// 	if (!n)
-// 		return (0);
-// 	while (s1[i] && i < n - 1)
-// 	{
-// 		if (s1[i] != s2[i])
-// 			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-// 		i++;
-// 	}
-// 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-// }
+int	loop_hook(t_data *data)
+{
+	if (data->quit)
+	{
+		mlx_loop_end(data->mlx_ptr);
+		return (0);
+	}
+	return (1);
+}
 
 int	check_extension(char *map_file)
 {
