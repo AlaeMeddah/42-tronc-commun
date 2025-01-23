@@ -6,56 +6,71 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:13:38 by almeddah          #+#    #+#             */
-/*   Updated: 2025/01/21 17:38:05 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/01/23 17:49:47 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ipc.h"
 
+volatile int	g_received = 0;
+
+void	signal_handler(int sig)
+{
+	if (sig == SIGUSR1)
+		ft_putstr_fd("character received by the server\n", STDOUT_FILENO);
+	else if (sig == SIGUSR2)
+		ft_putstr_fd("message received completly by the server\n",
+			STDOUT_FILENO);
+	g_received = 1;
+}
+
 void	send_message(int pid, char *message)
 {
-	int	letter;
-	int	i;
+	int		i;
+	char	c;
 
-	letter = 0;
-	while (message[letter])
+	while (*message)
 	{
-		i = -1;
-		while (++i < 8)
+		i = 8;
+		c = *message++;
+		while (i--)
 		{
-			if (((unsigned char)(message[letter] >> (7 - i)) & 1) == 0)
-				kill(pid, SIGUSR1);
-			else if (((unsigned char)(message[letter] >> (7 - i)) & 1) == 1)
+			if (c >> i & 1)
 				kill(pid, SIGUSR2);
-			usleep(50);
+			else
+				kill(pid, SIGUSR1);
+			usleep(100);
 		}
-		letter++;
+		while (!g_received)
+			pause();
+		g_received = 0;
 	}
-	i = 0;
-	while (i++ < 8)
+	i = 8;
+	while (i--)
 	{
 		kill(pid, SIGUSR1);
-		usleep(50);
+		usleep(100);
 	}
 }
 
 int	main(int argc, char **argv)
 {
-	int pid;
-	char *message;
+	int					pid;
+	char				*message;
+	struct sigaction	action;
 
 	if (argc == 3)
 	{
 		pid = atoi(argv[1]);
 		message = argv[2];
-		printf("PID: %d\n", pid);
-		printf("Message: %s", message);
+		action.sa_handler = signal_handler;
+		action.sa_flags = 0;
+		sigemptyset(&action.sa_mask);
+		sigaction(SIGUSR1, &action, NULL);
+		sigaction(SIGUSR2, &action, NULL);
 		send_message(pid, message);
 	}
 	else
-	{
-		printf("Error: Merci d'entrer un PID et un Message");
-	}
-
+		ft_putstr_fd("Error: Wrong arguments\n", STDOUT_FILENO);
 	return (0);
 }
