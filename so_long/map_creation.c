@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 13:24:28 by alae              #+#    #+#             */
-/*   Updated: 2025/01/20 18:36:09 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/01/27 17:48:25 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	map_size(char *map_file, t_data *data)
 		line = get_next_line(fd);
 		if (!line)
 			break ;
-		data->width = ft_strlen(line);
+		data->width = ft_strlen(line) - 1;
 		data->height++;
 		free(line);
 	}
@@ -67,10 +67,7 @@ int	fill_map_data(t_data *data, int fd)
 		data->map[y] = malloc(data->width * sizeof(t_map));
 		line = get_next_line(fd);
 		if (!data->map[y] || !line)
-		{
-			free_map(data->map, y);
-			return (0);
-		}
+			return (y);
 		while (++x < data->width)
 		{
 			data->map[y][x].content = line[x];
@@ -80,7 +77,8 @@ int	fill_map_data(t_data *data, int fd)
 		}
 		free(line);
 	}
-	return (1);
+	line = get_next_line(fd);
+	return (0);
 }
 
 int	map_creation(char *map_file, t_data *data)
@@ -94,7 +92,12 @@ int	map_creation(char *map_file, t_data *data)
 		return (0);
 	result = fill_map_data(data, fd);
 	close(fd);
-	return (result);
+	if (result != 0)
+	{
+		free_map(data->map, result);
+		return (0);
+	}
+	return (1);
 }
 
 // void	print_map(t_map **map, int x, int y)
