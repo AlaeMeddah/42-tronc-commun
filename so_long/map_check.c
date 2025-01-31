@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 18:26:28 by almeddah          #+#    #+#             */
-/*   Updated: 2025/01/31 15:11:38 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/01/31 15:54:19 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,11 +89,11 @@ int	check_componants(t_data *data)
 	int	i;
 	int	j;
 
-	j = 0;
-	while (j < data->height)
+	j = -1;
+	while (++j < data->height)
 	{
-		i = 0;
-		while (i < data->width)
+		i = -1;
+		while (++i < data->width)
 		{
 			if (data->map[j][i].content == 'P' && !data->player.content)
 				data->player = data->map[j][i];
@@ -102,11 +102,10 @@ int	check_componants(t_data *data)
 			else if (data->map[j][i].content == 'C')
 				data->chests++;
 			else if (data->map[j][i].content != '0'
-				&& data->map[j][i].content != '1')
+				&& data->map[j][i].content != '1'
+				&& data->map[j][i].content != 'T')
 				return (componants_error(*data, i, j));
-			i++;
 		}
-		j++;
 	}
 	if (!data->player.content || !data->exit.content || data->chests == 0)
 		return (componants_error(*data, i, j));
@@ -115,7 +114,8 @@ int	check_componants(t_data *data)
 
 int	check_feasable(t_map *location, int *chests, int *exit, t_map **map)
 {
-	if (location->visited == 1 || location->content == '1')
+	if (location->visited == 1 || location->content == '1'
+		|| location->content == 'T')
 		return (0);
 	if (location->content == 'C')
 		(*chests)--;
