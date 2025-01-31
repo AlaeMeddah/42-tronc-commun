@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 18:26:28 by almeddah          #+#    #+#             */
-/*   Updated: 2025/01/27 17:36:27 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/01/31 15:11:38 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,11 @@
 int	check_map_form(char *map_file, t_data data)
 {
 	int		fd;
+	int		len;
+	int		res;
 	char	*line;
 
+	res = 1;
 	fd = open(map_file, O_RDONLY);
 	if (fd < 0)
 		return (0);
@@ -25,17 +28,17 @@ int	check_map_form(char *map_file, t_data data)
 		line = get_next_line(fd);
 		if (!line)
 			break ;
-		if ((int)ft_strlen(line) != data.width + 1)
-		{
-			ft_printf("Error: map must be rectangular\n");
-			free(line);
-			close(fd);
-			return (0);
-		}
+		len = (int)ft_strlen(line);
+		if (line[len - 1] == '\n')
+			len = len - 1;
+		if (len != data.width)
+			res = 0;
 		free(line);
 	}
+	if (res == 0)
+		ft_printf("Error: map must be rectangular\n");
 	close(fd);
-	return (1);
+	return (res);
 }
 
 int	check_wall(t_data data)

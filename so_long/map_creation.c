@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 13:24:28 by alae              #+#    #+#             */
-/*   Updated: 2025/01/27 17:48:25 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/01/31 15:14:11 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	map_size(char *map_file, t_data *data)
 		line = get_next_line(fd);
 		if (!line)
 			break ;
-		data->width = ft_strlen(line) - 1;
+		data->width = ft_strlen(line);
 		data->height++;
 		free(line);
 	}
