@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 18:18:39 by almeddah          #+#    #+#             */
-/*   Updated: 2025/01/31 16:46:10 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/01/31 19:10:04 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,6 @@ void	set_data(t_data *data)
 	data->player.content = '\0';
 	data->exit.content = '\0';
 	data->chests = 0;
-	data->mooves = 0;
+	data->moves = 0;
 	data->quit = 0;
 }

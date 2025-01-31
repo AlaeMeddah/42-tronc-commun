@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 13:24:28 by alae              #+#    #+#             */
-/*   Updated: 2025/01/31 15:14:11 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/01/31 19:08:55 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,7 @@ int	map(char *map_file, t_data *data)
 	if (!check_feasable(&(data->player), &chests, &exit, data->map))
 	{
 		ft_printf("Error : map must contain a valid path\n");
+		free_map(data->map, data->height);
 		return (0);
 	}
 	return (1);

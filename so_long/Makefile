@@ -1,6 +1,6 @@
 NAME = so_long
 
-SRCS = so_long.c map_check.c image.c map_creation.c moove.c set.c
+SRCS = so_long.c map_check.c image.c map_creation.c move.c set.c
 OBJS = $(SRCS:.c=.o)
 
 LIBFTPRINTF_DIR = printf

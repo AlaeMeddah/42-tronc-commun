@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 13:24:21 by alae              #+#    #+#             */
-/*   Updated: 2025/01/31 16:43:52 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/01/31 19:10:04 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ typedef struct s_data
 
 	void	*img_trap;
 
-	int		mooves;
+	int		moves;
 	int		quit;
 }			t_data;
 
