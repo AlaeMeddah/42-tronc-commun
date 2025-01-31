@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 18:21:44 by almeddah          #+#    #+#             */
-/*   Updated: 2025/01/31 16:16:07 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/01/31 16:47:10 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ void	draw_grid(t_data *data)
 				put_image_to_window(data, x, y, data->img_chest);
 			else if (data->map[y][x].content == 'E')
 				put_image_to_window(data, x, y, data->img_exit);
+			else if (data->map[y][x].content == 'T')
+				put_image_to_window(data, x, y, data->img_trap);
 		}
 	}
 	ft_string_put(data);

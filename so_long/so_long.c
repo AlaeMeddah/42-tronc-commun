@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 14:21:01 by almeddah          #+#    #+#             */
-/*   Updated: 2025/01/20 19:06:38 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/01/31 16:48:00 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void	cleanup(t_data *data)
 		mlx_destroy_image(data->mlx_ptr, data->img_chest);
 	if (data->img_player)
 		mlx_destroy_image(data->mlx_ptr, data->img_player);
+	if (data->img_trap)
+		mlx_destroy_image(data->mlx_ptr, data->img_trap);
 	if (data->win_ptr)
 		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
 	if (data->mlx_ptr)

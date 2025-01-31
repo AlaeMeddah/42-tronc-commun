@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 13:24:21 by alae              #+#    #+#             */
-/*   Updated: 2025/01/20 19:06:28 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/01/31 16:43:52 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,17 @@ typedef struct s_data
 	char	*player_file;
 	char	*chest_file;
 	char	*exit_file;
+
+	char	*trap_file;
+
 	void	*img_floor;
 	void	*img_wall;
 	void	*img_player;
 	void	*img_chest;
 	void	*img_exit;
+
+	void	*img_trap;
+
 	int		mooves;
 	int		quit;
 }			t_data;
