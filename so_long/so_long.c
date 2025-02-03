@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 14:21:01 by almeddah          #+#    #+#             */
-/*   Updated: 2025/01/31 16:48:00 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/02/03 11:42:56 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,20 @@ void	cleanup(t_data *data)
 		mlx_destroy_image(data->mlx_ptr, data->img_wall);
 	if (data->img_floor)
 		mlx_destroy_image(data->mlx_ptr, data->img_floor);
-	if (data->img_exit)
-		mlx_destroy_image(data->mlx_ptr, data->img_exit);
+	if (data->img_door_closed)
+		mlx_destroy_image(data->mlx_ptr, data->img_door_closed);
+	if (data->img_door_open)
+		mlx_destroy_image(data->mlx_ptr, data->img_door_open);
 	if (data->img_chest)
 		mlx_destroy_image(data->mlx_ptr, data->img_chest);
-	if (data->img_player)
-		mlx_destroy_image(data->mlx_ptr, data->img_player);
+	if (data->img_player_back)
+		mlx_destroy_image(data->mlx_ptr, data->img_player_back);
+	if (data->img_player_face)
+		mlx_destroy_image(data->mlx_ptr, data->img_player_face);
+	if (data->img_player_left)
+		mlx_destroy_image(data->mlx_ptr, data->img_player_left);
+	if (data->img_player_right)
+		mlx_destroy_image(data->mlx_ptr, data->img_player_right);
 	if (data->img_trap)
 		mlx_destroy_image(data->mlx_ptr, data->img_trap);
 	if (data->win_ptr)

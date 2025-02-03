@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 13:24:21 by alae              #+#    #+#             */
-/*   Updated: 2025/01/31 19:10:04 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/02/03 11:30:11 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,18 +39,26 @@ typedef struct s_data
 	int		chests;
 	char	*floor_file;
 	char	*wall_file;
-	char	*player_file;
+	char	*player_file_face;
+	char	*player_file_back;
+	char	*player_file_right;
+	char	*player_file_left;
 	char	*chest_file;
-	char	*exit_file;
-
+	char	*door_file_closed;
+	char	*door_file_open;
 	char	*trap_file;
 
 	void	*img_floor;
 	void	*img_wall;
 	void	*img_player;
-	void	*img_chest;
 	void	*img_exit;
-
+	void	*img_player_face;
+	void	*img_player_back;
+	void	*img_player_right;
+	void	*img_player_left;
+	void	*img_chest;
+	void	*img_door_closed;
+	void	*img_door_open;
 	void	*img_trap;
 
 	int		moves;
