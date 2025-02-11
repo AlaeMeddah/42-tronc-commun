@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:13:38 by almeddah          #+#    #+#             */
-/*   Updated: 2025/01/23 17:49:47 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/02/11 11:00:32 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ void	signal_handler(int sig)
 	g_received = 1;
 }
 
-void	send_message(int pid, char *message)
+void	send_message(int pid, unsigned char *message)
 {
-	int		i;
-	char	c;
+	int				i;
+	unsigned char	c;
 
 	while (*message)
 	{
@@ -35,7 +35,7 @@ void	send_message(int pid, char *message)
 		c = *message++;
 		while (i--)
 		{
-			if (c >> i & 1)
+			if (c & (1 << i))
 				kill(pid, SIGUSR2);
 			else
 				kill(pid, SIGUSR1);
@@ -56,13 +56,13 @@ void	send_message(int pid, char *message)
 int	main(int argc, char **argv)
 {
 	int					pid;
-	char				*message;
+	unsigned char		*message;
 	struct sigaction	action;
 
 	if (argc == 3)
 	{
 		pid = atoi(argv[1]);
-		message = argv[2];
+		message = (unsigned char *)argv[2];
 		action.sa_handler = signal_handler;
 		action.sa_flags = 0;
 		sigemptyset(&action.sa_mask);

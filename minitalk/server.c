@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   serveur.c                                          :+:      :+:    :+:   */
+/*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:13:04 by almeddah          #+#    #+#             */
-/*   Updated: 2025/01/23 17:25:18 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/02/11 11:26:31 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@ void	signal_handler(int sig, siginfo_t *info, void *context)
 {
 	static int	bit_count = 0;
 	static char	c = 0;
+	static int	byte_index = 0;
+	static int	expected_bytes = 0;
+	static char	buffer[5] = {0};
 
 	(void)context;
 	c <<= 1;
@@ -24,18 +27,40 @@ void	signal_handler(int sig, siginfo_t *info, void *context)
 	bit_count++;
 	if (bit_count == 8)
 	{
+		bit_count = 0;
 		if (c == 0)
 		{
-			ft_putchar_fd('\n', STDOUT_FILENO);
+			write(STDOUT_FILENO, "\n", 1);
 			kill(info->si_pid, SIGUSR2);
+			byte_index = 0;
+			expected_bytes = 0;
+			return ;
 		}
-		else
-		{
-			ft_putchar_fd(c, STDOUT_FILENO);
-			kill(info->si_pid, SIGUSR1);
-		}
+		buffer[byte_index++] = c;
 		c = 0;
-		bit_count = 0;
+		if (expected_bytes == 0)
+		{
+			if ((buffer[0] & 0x80) == 0x00)
+				expected_bytes = 1;
+			else if ((buffer[0] & 0xE0) == 0xC0)
+				expected_bytes = 2;
+			else if ((buffer[0] & 0xF0) == 0xE0)
+				expected_bytes = 3;
+			else if ((buffer[0] & 0xF8) == 0xF0)
+				expected_bytes = 4;
+			else
+			{
+				byte_index = 0;
+				expected_bytes = 0;
+			}
+		}
+		if (byte_index == expected_bytes)
+		{
+			write(STDOUT_FILENO, buffer, expected_bytes);
+			byte_index = 0;
+			expected_bytes = 0;
+		}
+		kill(info->si_pid, SIGUSR1);
 	}
 }
 
