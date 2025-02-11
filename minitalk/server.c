@@ -6,16 +6,43 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:13:04 by almeddah          #+#    #+#             */
-/*   Updated: 2025/02/11 11:26:31 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/02/11 12:10:51 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ipc.h"
 
+// void	signal_handler(int sig, siginfo_t *info, void *context)
+// {
+// 	static int	bit_count = 0;
+// 	static char	c = 0;
+
+// 	(void)context;
+// 	c <<= 1;
+// 	if (sig == SIGUSR2)
+// 		c |= 1;
+// 	bit_count++;
+// 	if (bit_count == 8)
+// 	{
+// 		if (c == 0)
+// 		{
+// 			ft_putchar_fd('\n', STDOUT_FILENO);
+// 			kill(info->si_pid, SIGUSR2);
+// 		}
+// 		else
+// 		{
+// 			ft_putchar_fd(c, STDOUT_FILENO);
+// 			kill(info->si_pid, SIGUSR1);
+// 		}
+// 		c = 0;
+// 		bit_count = 0;
+// 	}
+// }
+
 void	signal_handler(int sig, siginfo_t *info, void *context)
 {
-	static int	bit_count = 0;
 	static char	c = 0;
+	static int	bit_count = 0;
 	static int	byte_index = 0;
 	static int	expected_bytes = 0;
 	static char	buffer[5] = {0};
@@ -32,12 +59,9 @@ void	signal_handler(int sig, siginfo_t *info, void *context)
 		{
 			write(STDOUT_FILENO, "\n", 1);
 			kill(info->si_pid, SIGUSR2);
-			byte_index = 0;
-			expected_bytes = 0;
 			return ;
 		}
 		buffer[byte_index++] = c;
-		c = 0;
 		if (expected_bytes == 0)
 		{
 			if ((buffer[0] & 0x80) == 0x00)
@@ -48,11 +72,6 @@ void	signal_handler(int sig, siginfo_t *info, void *context)
 				expected_bytes = 3;
 			else if ((buffer[0] & 0xF8) == 0xF0)
 				expected_bytes = 4;
-			else
-			{
-				byte_index = 0;
-				expected_bytes = 0;
-			}
 		}
 		if (byte_index == expected_bytes)
 		{
@@ -60,6 +79,7 @@ void	signal_handler(int sig, siginfo_t *info, void *context)
 			byte_index = 0;
 			expected_bytes = 0;
 		}
+		c = 0;
 		kill(info->si_pid, SIGUSR1);
 	}
 }

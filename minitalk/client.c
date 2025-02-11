@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:13:38 by almeddah          #+#    #+#             */
-/*   Updated: 2025/02/11 11:00:32 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/02/11 11:48:07 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ volatile int	g_received = 0;
 void	signal_handler(int sig)
 {
 	if (sig == SIGUSR1)
-		ft_putstr_fd("character received by the server\n", STDOUT_FILENO);
+		ft_putstr_fd("signal received by the server\n", STDOUT_FILENO);
 	else if (sig == SIGUSR2)
 		ft_putstr_fd("message received completly by the server\n",
 			STDOUT_FILENO);
