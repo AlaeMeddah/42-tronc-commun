@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 14:31:46 by almeddah          #+#    #+#             */
-/*   Updated: 2024/11/21 18:00:51 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/03/03 16:36:45 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,6 @@ void				ft_lstiter(t_list *lst, void (*f)(void *));
 t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
 						void (*del)(void *));
 char				*ft_strncat(char *dest, const char *src, unsigned int nb);
+int					ft_isnum(char *str);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:13:38 by almeddah          #+#    #+#             */
-/*   Updated: 2025/02/11 11:48:07 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/03/04 19:03:15 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	send_message(int pid, unsigned char *message)
 				kill(pid, SIGUSR2);
 			else
 				kill(pid, SIGUSR1);
-			usleep(100);
+			usleep(200);
 		}
 		while (!g_received)
 			pause();
@@ -49,7 +49,7 @@ void	send_message(int pid, unsigned char *message)
 	while (i--)
 	{
 		kill(pid, SIGUSR1);
-		usleep(100);
+		usleep(200);
 	}
 }
 
