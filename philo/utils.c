@@ -6,11 +6,31 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:29:59 by almeddah          #+#    #+#             */
-/*   Updated: 2024/10/24 15:43:48 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/03/12 16:49:27 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "philo.h"
+
+int	ft_isdigit(int c)
+{
+	if (c < '0' || c > '9')
+		return (0);
+	return (1);
+}
+
+int	ft_isnum(char *str)
+{
+	if (!str || !*str)
+		return (0);
+	while (*str)
+	{
+		if (!ft_isdigit(*str))
+			return (0);
+		str++;
+	}
+	return (1);
+}
 
 static int	ft_isspace(int c)
 {
