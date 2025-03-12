@@ -94,26 +94,23 @@ int	thinking(t_philo *philo, t_data *data)
 			else
 				pthread_mutex_unlock(&data->forks[philo->id]);
 		}
-		usleep(1000);
+		usleep(200);
 	}
 	return (1);
 }
 
 int	eating(t_philo *philo, t_data *data)
 {
-	int	i;
-
 	gettimeofday(&philo->last_eat, NULL);
 	printf("%ld philo %d started eating using forks %d et %d\n",
 		get_time_in_ms(data->start), philo->id, philo->id, philo->fork_2);
-	i = -1;
-	while (++i < data->time_eat)
+	while (get_time_in_ms(philo->last_eat) < data->time_eat)
 	{
-		usleep(1000);
 		if (check_death(*philo))
 			data->died = 1;
 		if (data->died || data->finished == data->nb_philos)
 			return (0);
+		usleep(200);
 	}
 	printf("%ld philo %d finished eating using forks %d et %d\n",
 		get_time_in_ms(data->start), philo->id, philo->id, philo->fork_2);
@@ -125,18 +122,15 @@ int	eating(t_philo *philo, t_data *data)
 
 int	sleeping(t_philo *philo, t_data *data)
 {
-	int	i;
-
 	printf("%ld philo %d started sleeping\n", get_time_in_ms(data->start),
 		philo->id);
-	i = -1;
-	while (++i < data->time_sleep)
+	while (get_time_in_ms(philo->last_eat) < data->time_eat + data->time_sleep)
 	{
-		usleep(1000);
 		if (check_death(*philo))
 			data->died = 1;
 		if (data->died || data->finished == data->nb_philos)
 			return (0);
+		usleep(200);
 	}
 	printf("%ld philo %d started thinking\n", get_time_in_ms(data->start),
 		philo->id);
