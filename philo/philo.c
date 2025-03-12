@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 16:36:50 by almeddah          #+#    #+#             */
-/*   Updated: 2025/03/12 16:43:20 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/03/12 17:00:06 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,6 +185,7 @@ int	main(int argc, char **argv)
 		pthread_mutex_destroy(&data.forks[i]);
 	}
 	free(data.forks);
+	free(data.forks_status);
 	for (i = 0; i < data.nb_philos; i++)
 	{
 		free(philos[i]);
