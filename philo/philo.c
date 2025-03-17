@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 16:36:50 by almeddah          #+#    #+#             */
-/*   Updated: 2025/03/12 17:00:06 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/03/17 13:29:58 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,8 @@ void	*philo_function(void *arg)
 
 	philo = (t_philo *)arg;
 	data = philo->data;
-	philo->nb_eaten = 0;
 	printf("%ld philo %d started thinking\n", get_time_in_ms(data->start),
 		philo->id);
-	philo->last_eat = data->start;
 	if (philo->id == data->nb_philos)
 		philo->fork_2 = 1;
 	else
@@ -96,56 +94,52 @@ void	*philo_function(void *arg)
 	return (NULL);
 }
 
+void	set_data(t_data *data, int argc, char **argv)
+{
+	data->nb_philos = ft_atoi(argv[1]);
+	data->time_die = ft_atoi(argv[2]);
+	data->time_eat = ft_atoi(argv[3]);
+	data->time_sleep = ft_atoi(argv[4]);
+	data->died = 0;
+	data->finished = 0;
+	if (argc == 6)
+		data->nb_eat = ft_atoi(argv[5]);
+	else
+		data->nb_eat = -1;
+}
+
+int	mem_alloc(t_data *data, t_philo ***philos)
+{
+	int	i;
+
+	*philos = malloc(data->nb_philos * sizeof(t_philo *));
+	data->forks = malloc((data->nb_philos + 1) * sizeof(pthread_mutex_t));
+	data->forks_status = malloc((data->nb_philos + 1) * sizeof(int));
+	if (!(*philos) || !data->forks || !data->forks_status)
+	{
+		perror("Memory allocation failed");
+		return (0);
+	}
+	i = -1;
+	while (++i < data->nb_philos + 1)
+	{
+		pthread_mutex_init(&data->forks[i], NULL);
+		data->forks_status[i] = 0;
+	}
+	return (1);
+}
+
 int	main(int argc, char **argv)
 {
 	int		i;
 	t_data	data;
 	t_philo	**philos;
 
-	if (argc < 5 || argc > 6)
+	if (!check_args(argc, argv))
 		return (0);
-	i = 0;
-	while (++i < argc)
-	{
-		if (!ft_isnum(argv[i]))
-			return (0);
-	}
-	data.nb_philos = ft_atoi(argv[1]);
-	data.time_die = ft_atoi(argv[2]);
-	data.time_eat = ft_atoi(argv[3]);
-	data.time_sleep = ft_atoi(argv[4]);
-	data.died = 0;
-	data.finished = 0;
-	if (argc == 6)
-		data.nb_eat = ft_atoi(argv[5]);
-	else
-		data.nb_eat = -1;
-	philos = malloc(data.nb_philos * sizeof(t_philo *));
-	if (!philos)
-	{
-		perror("Memory allocation failed");
-		return (EXIT_FAILURE);
-	}
-	data.forks = malloc((data.nb_philos + 1) * sizeof(pthread_mutex_t));
-	if (!data.forks)
-	{
-		perror("Memory allocation failed");
-		free(philos);
-		return (EXIT_FAILURE);
-	}
-	data.forks_status = malloc((data.nb_philos + 1) * sizeof(int));
-	if (!data.forks_status)
-	{
-		perror("Memory allocation failed");
-		free(philos);
-		return (EXIT_FAILURE);
-	}
-	i = -1;
-	while (++i < data.nb_philos + 1)
-	{
-		pthread_mutex_init(&data.forks[i], NULL);
-		data.forks_status[i] = 0;
-	}
+	set_data(&data, argc, argv);
+	if (!mem_alloc(&data, &philos))
+		return (0);
 	i = -1;
 	gettimeofday(&data.start, NULL);
 	while (++i < data.nb_philos)
@@ -154,18 +148,16 @@ int	main(int argc, char **argv)
 		if (!philos[i])
 		{
 			perror("Memory allocation for philosopher failed");
-			free(philos);
-			free(data.forks);
 			return (EXIT_FAILURE);
 		}
 		philos[i]->id = i + 1;
+		philos[i]->nb_eaten = 0;
+		philos[i]->last_eat = data.start;
 		philos[i]->data = &data;
 		if (pthread_create(&philos[i]->thread, NULL, &philo_function,
 				philos[i]) != 0)
 		{
 			perror("Failed to create thread");
-			free(philos);
-			free(data.forks);
 			return (EXIT_FAILURE);
 		}
 	}

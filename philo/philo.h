@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 16:35:15 by almeddah          #+#    #+#             */
-/*   Updated: 2025/03/12 16:55:27 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/03/17 11:46:54 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,5 +52,6 @@ int					ft_atoi(const char *str);
 time_t				get_time_in_ms(struct timeval start);
 int					check_death(t_philo philo);
 int					check_finished(t_philo *philo, t_data *data);
+int					check_args(int argc, char **argv);
 
 #endif
