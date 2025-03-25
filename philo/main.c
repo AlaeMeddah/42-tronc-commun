@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 16:36:50 by almeddah          #+#    #+#             */
-/*   Updated: 2025/03/17 13:29:58 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/03/25 13:17:20 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,69 @@ int	mem_alloc(t_data *data, t_philo ***philos)
 	return (1);
 }
 
+int	obsorver_creation(void)
+{
+	int obsorver_id, obsorver, philos;
+	if (pthread_create(&obsorver_id, NULL, &obsorver, philos) != 0)
+	{
+		perror("Failed to create thread");
+		return (0);
+	}
+	return (1);
+}
+
+int	philo_creation(t_data *data, t_philo **philos)
+{
+	int	i;
+
+	i = -1;
+	gettimeofday(&data->start, NULL);
+	while (++i < data->nb_philos)
+	{
+		philos[i] = malloc(sizeof(t_philo));
+		if (!philos[i])
+		{
+			perror("Memory allocation for philosopher failed");
+			return (0);
+		}
+		philos[i]->id = i + 1;
+		philos[i]->nb_eaten = 0;
+		philos[i]->last_eat = data->start;
+		philos[i]->data = data;
+		if (pthread_create(&philos[i]->thread, NULL, &philo_function,
+				philos[i]) != 0)
+		{
+			perror("Failed to create thread");
+			return (0);
+		}
+	}
+	return (1);
+}
+
+int	thread_start(t_data *data, t_philo **philos)
+{
+	int i, observer_id;
+	i = -1;
+	if (pthread_join(&observer_id, NULL) != 0)
+	{
+		perror("Failed to create thread");
+		free(philos);
+		free(data->forks);
+		return (0);
+	}
+	while (++i < data->nb_philos)
+	{
+		if (pthread_detach(philos[i]->thread) != 0)
+		{
+			perror("Failed to create thread");
+			free(philos);
+			free(data->forks);
+			return (0);
+		}
+	}
+	return (1);
+}
+
 int	main(int argc, char **argv)
 {
 	int		i;
@@ -140,48 +203,20 @@ int	main(int argc, char **argv)
 	set_data(&data, argc, argv);
 	if (!mem_alloc(&data, &philos))
 		return (0);
+	if (!observer_creation(&data, philos))
+		return (0);
+	if (!philo_creation(&data, philos))
+		return (0);
+	if (!thread_start(&data, philos))
+		return (0);
 	i = -1;
-	gettimeofday(&data.start, NULL);
-	while (++i < data.nb_philos)
-	{
-		philos[i] = malloc(sizeof(t_philo));
-		if (!philos[i])
-		{
-			perror("Memory allocation for philosopher failed");
-			return (EXIT_FAILURE);
-		}
-		philos[i]->id = i + 1;
-		philos[i]->nb_eaten = 0;
-		philos[i]->last_eat = data.start;
-		philos[i]->data = &data;
-		if (pthread_create(&philos[i]->thread, NULL, &philo_function,
-				philos[i]) != 0)
-		{
-			perror("Failed to create thread");
-			return (EXIT_FAILURE);
-		}
-	}
-	i = -1;
-	while (++i < data.nb_philos)
-	{
-		if (pthread_join(philos[i]->thread, NULL) != 0)
-		{
-			perror("Failed to create thread");
-			free(philos);
-			free(data.forks);
-			return (EXIT_FAILURE);
-		}
-	}
-	for (i = 0; i < data.nb_philos + 1; i++)
-	{
+	while (++i < data.nb_philos + 1)
 		pthread_mutex_destroy(&data.forks[i]);
-	}
 	free(data.forks);
 	free(data.forks_status);
-	for (i = 0; i < data.nb_philos; i++)
-	{
+	i = -1;
+	while (++i < data.nb_philos)
 		free(philos[i]);
-	}
 	free(philos);
 	return (0);
 }

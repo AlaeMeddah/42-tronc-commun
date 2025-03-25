@@ -6,11 +6,11 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 18:21:44 by almeddah          #+#    #+#             */
-/*   Updated: 2025/02/03 11:57:07 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/03/25 13:53:18 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "../so_long.h"
 
 void	put_image_to_window(t_data *data, int x, int y, void *img)
 {

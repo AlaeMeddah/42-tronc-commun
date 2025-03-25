@@ -6,11 +6,11 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 13:24:28 by alae              #+#    #+#             */
-/*   Updated: 2025/01/31 19:08:55 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/03/25 13:53:25 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "../so_long.h"
 
 void	free_map(t_map **map, int y)
 {

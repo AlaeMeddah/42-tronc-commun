@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 13:24:21 by alae              #+#    #+#             */
-/*   Updated: 2025/02/03 11:30:11 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/03/25 13:44:55 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,5 +79,7 @@ int			check_componants(t_data *data);
 int			componants_error(t_data data, int i, int j);
 int			check_wall(t_data data);
 int			check_map_form(char *map_file, t_data data);
+void		ft_string_put(t_data *data);
+void		moove_exit(t_data *data);
 
 #endif

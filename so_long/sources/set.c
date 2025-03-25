@@ -6,11 +6,11 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 18:18:39 by almeddah          #+#    #+#             */
-/*   Updated: 2025/02/03 11:31:38 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/03/25 13:50:10 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "../so_long.h"
 
 void	set_mlx_img(t_data *data)
 {

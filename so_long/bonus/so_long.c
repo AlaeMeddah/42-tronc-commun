@@ -6,11 +6,11 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 14:21:01 by almeddah          #+#    #+#             */
-/*   Updated: 2025/02/03 11:42:56 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/03/25 13:53:37 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "../so_long.h"
 
 int	handle_close(t_data *data)
 {

@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 16:35:22 by almeddah          #+#    #+#             */
-/*   Updated: 2025/03/12 16:40:40 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/03/25 12:31:43 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,37 +16,16 @@ void	thinking_2(int *hold_fork1, t_data *data, t_philo *philo)
 {
 	*hold_fork1 = 1;
 	data->forks_status[philo->id] = 1;
-	pthread_mutex_lock(&data->forks[philo->id]);
-	printf("%ld philo %d picked up fork %d\n", get_time_in_ms(data->start),
-		philo->id, philo->id);
 }
 
 int	thinking(t_philo *philo, t_data *data)
 {
-	int	hold_fork1;
-
-	hold_fork1 = 0;
-	while (1)
-	{
-		if (check_death(*philo))
-			data->died = 1;
-		if (data->died || data->finished == data->nb_philos)
-			return (0);
-		if (data->forks_status[philo->id] == 0 || hold_fork1)
-		{
-			if (!hold_fork1)
-				thinking_2(&hold_fork1, data, philo);
-			if (data->forks_status[philo->fork_2] == 0)
-			{
-				data->forks_status[philo->fork_2] = 1;
-				pthread_mutex_lock(&data->forks[philo->fork_2]);
-				printf("%ld philo %d picked up fork %d\n",
-					get_time_in_ms(data->start), philo->id, philo->fork_2);
-				hold_fork1 = 0;
-				break ;
-			}
-		}
-	}
+	pthread_mutex_lock(&data->forks[philo->id]);
+	printf("%ld philo %d picked up fork %d\n", get_time_in_ms(data->start),
+		philo->id, philo->id);
+	pthread_mutex_lock(&data->forks[philo->fork_2]);
+	printf("%ld philo %d picked up fork %d\n", get_time_in_ms(data->start),
+		philo->id, philo->fork_2);
 	return (1);
 }
 

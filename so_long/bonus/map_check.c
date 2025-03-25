@@ -6,11 +6,11 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 18:26:28 by almeddah          #+#    #+#             */
-/*   Updated: 2025/01/31 15:54:19 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/03/25 13:53:22 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "../so_long.h"
 
 int	check_map_form(char *map_file, t_data data)
 {
@@ -73,6 +73,8 @@ int	componants_error(t_data data, int i, int j)
 			ft_printf("Error : map must not contain more than one player\n");
 		if (data.map[j][i].content == 'E')
 			ft_printf("Error : map must not contain more than one exit\n");
+		else
+			ft_printf("Error : invalid componants detected\n");
 		return (0);
 	}
 	if (!data.player.content)
