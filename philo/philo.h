@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 16:35:15 by almeddah          #+#    #+#             */
-/*   Updated: 2025/03/26 12:10:10 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/03/26 15:29:00 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,12 @@ typedef struct s_philo
 int					thinking(t_philo *philo, t_data *data);
 int					eating(t_philo *philo, t_data *data);
 int					sleeping(t_philo *philo, t_data *data);
-int					ft_isnum(char *str);
 int					ft_atoi(const char *str);
-time_t				get_time_in_ms(struct timeval start);
 int					check_args(int argc, char **argv);
-void				print_function(char *str, t_data *data, t_philo *philo);
-void				*philo_function(void *arg);
+time_t				get_time_in_ms(struct timeval start);
+int					monitor_creation(pthread_t *observer, t_philo **philos);
+int					philo_creation(t_data *data, t_philo **philos);
+void				init_data(t_data *data, int argc, char **argv);
+void				init_philo(t_philo *philo, t_data *data, int i);
 
 #endif

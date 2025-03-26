@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 10:59:20 by almeddah          #+#    #+#             */
-/*   Updated: 2025/03/26 13:11:56 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/03/26 15:34:16 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,27 +19,19 @@ void	fork_assignement(t_philo *philo, t_data *data)
 	else
 		philo->fork_2 = philo->id + 1;
 	if (philo->id % 2 == 0)
-		usleep(25);
+		usleep(100);
 	return ;
 }
 
-void	print_function(char *str, t_data *data, t_philo *philo)
-{
-	pthread_mutex_lock(&data->lock);
-	if (!data->end_simu)
-		printf(str, get_time_in_ms(data->start), philo->id);
-	pthread_mutex_unlock(&data->lock);
-	return ;
-}
-
-void	*philo_function(void *arg)
+void	*multiple_philos(void *arg)
 {
 	t_philo	*philo;
 	t_data	*data;
 
 	philo = (t_philo *)arg;
 	data = philo->data;
-	print_function("%ld philo %d started thinking\n", data, philo);
+	printf("%ld philo %d started thinking\n", get_time_in_ms(data->start),
+		philo->id);
 	fork_assignement(philo, data);
 	while (1)
 	{
@@ -53,4 +45,48 @@ void	*philo_function(void *arg)
 			return (NULL);
 	}
 	return (NULL);
+}
+
+void	*lone_philo(void *arg)
+{
+	t_philo	*philo;
+	t_data	*data;
+
+	philo = (t_philo *)arg;
+	data = philo->data;
+	printf("%ld philo %d started thinking\n", get_time_in_ms(data->start),
+		philo->id);
+	pthread_mutex_lock(&data->forks[philo->id]);
+	printf("%ld philo %d picked up fork %d\n", get_time_in_ms(data->start),
+		philo->id, philo->id);
+	return (NULL);
+}
+
+int	philo_creation(t_data *data, t_philo **philos)
+{
+	int		i;
+	void	*(*philo_function)(void *);
+
+	philo_function = lone_philo;
+	if (data->nb_philos != 1)
+		philo_function = multiple_philos;
+	i = -1;
+	gettimeofday(&data->start, NULL);
+	while (++i < data->nb_philos)
+	{
+		philos[i] = malloc(sizeof(t_philo));
+		if (!philos[i])
+		{
+			perror("Memory allocation for philosopher failed");
+			return (0);
+		}
+		init_philo(philos[i], data, i);
+		if (pthread_create(&philos[i]->thread, NULL, philo_function,
+				philos[i]) != 0)
+		{
+			perror("Failed to create philo");
+			return (0);
+		}
+	}
+	return (1);
 }
