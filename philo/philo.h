@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 16:35:15 by almeddah          #+#    #+#             */
-/*   Updated: 2025/03/17 11:46:54 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/03/26 12:10:10 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ typedef struct s_data
 	int				time_eat;
 	int				time_sleep;
 	int				nb_eat;
-	int				died;
 	int				finished;
+	int				end_simu;
 	struct timeval	start;
+	pthread_mutex_t	lock;
 	pthread_mutex_t	*forks;
-	int				*forks_status;
 }					t_data;
 
 typedef struct s_philo
@@ -50,8 +50,8 @@ int					sleeping(t_philo *philo, t_data *data);
 int					ft_isnum(char *str);
 int					ft_atoi(const char *str);
 time_t				get_time_in_ms(struct timeval start);
-int					check_death(t_philo philo);
-int					check_finished(t_philo *philo, t_data *data);
 int					check_args(int argc, char **argv);
+void				print_function(char *str, t_data *data, t_philo *philo);
+void				*philo_function(void *arg);
 
 #endif

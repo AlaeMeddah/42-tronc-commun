@@ -1,11 +1,11 @@
 NAME = philo
 
-SRCS = main.c routine.c utils.c checks.c
+SRCS = main.c routine.c utils.c checks.c philo.c
 
 OBJS = $(SRCS:.c=.o)
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror #-fsanitize=leak -fsanitize=thread
 
 all: $(NAME)
 
