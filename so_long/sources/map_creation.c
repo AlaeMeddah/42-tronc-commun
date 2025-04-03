@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 13:24:28 by alae              #+#    #+#             */
-/*   Updated: 2025/03/25 13:49:54 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/04/03 19:24:50 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,10 +114,10 @@ int	map(char *map_file, t_data *data)
 	if (!check_wall(*data))
 	{
 		ft_printf("Error : map must be closed\n");
-		return (0);
+		return (free_map(data->map, data->height), 0);
 	}
 	if (!check_componants(data))
-		return (0);
+		return (free_map(data->map, data->height), 0);
 	exit = 0;
 	chests = data->chests;
 	if (!check_feasable(&(data->player), &chests, &exit, data->map))
