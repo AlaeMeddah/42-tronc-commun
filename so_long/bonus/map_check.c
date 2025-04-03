@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 18:26:28 by almeddah          #+#    #+#             */
-/*   Updated: 2025/03/25 13:53:22 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/04/03 18:13:50 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,8 @@ int	check_feasable(t_map *location, int *chests, int *exit, t_map **map)
 	location->visited = 1;
 	if (*exit == 1 && *chests == 0)
 		return (1);
+	if (location->content == 'E')
+		return (0);
 	if (check_feasable(&map[location->y][location->x - 1], chests, exit, map))
 		return (1);
 	if (check_feasable(&map[location->y][location->x + 1], chests, exit, map))
