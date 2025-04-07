@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 13:24:21 by alae              #+#    #+#             */
-/*   Updated: 2025/03/25 13:44:55 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/04/07 15:14:26 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ typedef struct s_data
 }			t_data;
 
 int			map(char *map_file, t_data *data);
-void		free_map(t_map **map, int y);
+int			free_map(t_map **map, int y);
 int			key_handler(int keycode, t_data *data);
 int			set_img(t_data *data);
 void		set_data(t_data *data);
