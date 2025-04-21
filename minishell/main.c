@@ -6,37 +6,65 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:27:05 by almeddah          #+#    #+#             */
-/*   Updated: 2025/04/21 17:13:50 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/04/21 18:39:43 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// t_token	*create_token(int n)
-// {
-// 	t_token	*new_token;
+t_input_redirect	*create_input_redirect(char *str1, char *str2)
+{
+	t_input_redirect	*new_redir;
 
-// 	new_token = malloc(sizeof(t_token));
-// 	if (!new_token)
-// 		return (0);
-// 	new_token->cmd_number = n;
-// 	new_token->cmd = NULL;
-// 	new_token->args = NULL;
-// 	new_token->infile = NULL;
-// 	new_token->outfile = NULL;
-// 	new_token->next = NULL;
-// 	return (new_token);
-// }
+	if (!str2)
+		return (NULL);
+	new_redir = malloc(sizeof(t_input_redirect));
+	if (!new_redir)
+		return (NULL);
+	new_redir->file = NULL;
+	new_redir->delim = NULL;
+	if (!ft_strncmp(str1, "<", 2))
+		new_redir->file = ft_strdup(str2);
+	else
+		new_redir->delim = ft_strdup(str2);
+	new_redir->next = NULL;
+	return (new_redir);
+}
 
-// t_token	*create_token_list(char **data)
-// {
-// 	t_token *token_list;
-// 	t_token *new_token;
-// 	int cmd_nb = 1;
+t_output_redirect	*create_output_redirect(char *str1, char *str2)
+{
+	t_output_redirect	*new_redir;
 
-// 	token_list = NULL;
+	if (!str2)
+		return (NULL);
+	new_redir = malloc(sizeof(t_output_redirect));
+	if (!new_redir)
+		return (NULL);
+	new_redir->file = ft_strdup(str2);
+	new_redir->append = 0;
+	if (!ft_strncmp(str1, ">>", 2))
+		new_redir->append = 1;
+	new_redir->next = NULL;
+	return (new_redir);
+}
 
-// }
+t_command	*create_command(void)
+{
+	t_command	*new_command;
+
+	new_command = malloc(sizeof(t_command));
+	if (!new_command)
+		return (0);
+	return (new_command);
+}
+
+t_command	*create_command_list(char **data)
+{
+	t_command	*command_list;
+	t_command	*new_command;
+
+	command_list = NULL;
+}
 
 char	*ft_strncpy(char *src, int n)
 {

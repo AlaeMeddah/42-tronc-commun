@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:25:34 by almeddah          #+#    #+#             */
-/*   Updated: 2025/04/21 17:48:43 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/04/21 18:30:51 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,22 +21,22 @@
 typedef struct s_output_redirect
 {
 	char						*file;
-	int							output_append;
-	struct t_output_redirect	*next;
-}								t_redirect;
+	int							append;
+	struct s_output_redirect	*next;
+}								t_output_redirect;
 
 typedef struct s_input_redirect
 {
 	char						*file;
-	char						*heredoc_delim;
-	struct t_input_redirect		*next;
+	char						*delim;
+	struct s_input_redirect		*next;
 }								t_input_redirect;
 
 typedef struct s_command
 {
 	char						**argv;
 	t_input_redirect			*input_redirect;
-	t_redirect					*output_redirect;
+	t_output_redirect			*output_redirect;
 	struct s_command			*next_pipe;
 }								t_command;
 
