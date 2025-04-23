@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:25:34 by almeddah          #+#    #+#             */
-/*   Updated: 2025/04/21 18:30:51 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/04/23 14:24:21 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,26 +18,41 @@
 # include "readline/readline.h"
 # include "stdio.h"
 
+// typedef struct s_redir
+// {
+// 	char			*filename;
+// 	int				type;
+// 	struct s_redir	*next;
+// }					t_redir;
+
+// typedef struct s_cmd
+// {
+// 	char			**args;
+// 	t_redir			*redir_in;
+// 	t_redir			*redir_out;
+// 	struct s_cmd	*next;
+// }					t_cmd;
+
 typedef struct s_output_redirect
 {
+	struct s_output_redirect	*next;
 	char						*file;
 	int							append;
-	struct s_output_redirect	*next;
 }								t_output_redirect;
 
 typedef struct s_input_redirect
 {
+	struct s_input_redirect		*next;
 	char						*file;
 	char						*delim;
-	struct s_input_redirect		*next;
 }								t_input_redirect;
 
 typedef struct s_command
 {
+	struct s_command			*next;
 	char						**argv;
 	t_input_redirect			*input_redirect;
 	t_output_redirect			*output_redirect;
-	struct s_command			*next_pipe;
 }								t_command;
 
 #endif
