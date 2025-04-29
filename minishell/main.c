@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:27:05 by almeddah          #+#    #+#             */
-/*   Updated: 2025/04/23 14:49:19 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/04/29 15:29:05 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,47 +167,95 @@ char	*ft_strncpy(char *src, int n)
 	return (dest);
 }
 
+int	quote_skip(char *str)
+{
+	int	i;
+
+	i = 1;
+	while (str[i] != *str)
+	{
+		if (!str[i])
+			return (0);
+		i++;
+	}
+	return (i);
+}
+
+void	free_char_list(char **data)
+{
+	int	i;
+
+	i = 0;
+	while (data[i])
+	{
+		printf("%s\n", data[i]);
+		free(data[i]);
+		i++;
+	}
+	free(data);
+}
+
 char	**create_data(char *prompt)
 {
 	char	**data;
+	char	**new_data;
 	int		i;
+	int		j;
 	int		k;
+	int		l;
 
-	i = 0;
+	i = 10;
+	j = 0;
 	k = 0;
-	data = malloc(sizeof(char *) * 20);
+	data = malloc(sizeof(char *) * i);
 	while (*prompt)
 	{
 		k = 0;
 		while (*prompt && ft_isspace(*prompt))
 			prompt++;
-		if (*prompt == '\'' || *prompt == '"')
-		{
-			k++;
-			while (prompt[k] != *prompt)
-			{
-				if (!prompt[k])
-				{
-					printf("unclosed quote\n");
-					return (NULL);
-				}
-				k++;
-			}
-			k++;
-		}
-		else if (*prompt == '|')
+		if (*prompt == '|')
 			k++;
 		else
 		{
-			while (prompt[k] && !ft_isspace(prompt[k]) && prompt[k] != '|'
-				&& prompt[k] != '\'' && prompt[k] != '"')
+			while (prompt[k] && !ft_isspace(prompt[k]) && prompt[k] != '|')
+			{
+				if (prompt[k] == '\'' || prompt[k] == '"')
+				{
+					if (!quote_skip(prompt + k))
+					{
+						printf("unclosed quote\n");
+						data[j] = NULL;
+						free_char_list(data);
+						return (NULL);
+					}
+					k += quote_skip(prompt + k);
+				}
 				k++;
+			}
 		}
-		data[i] = ft_strncpy(prompt, k);
+		if (j >= i - 1)
+		{
+			i += 10;
+			new_data = malloc(sizeof(char *) * i);
+			if (!new_data)
+			{
+				free_char_list(data);
+				return (NULL);
+			}
+			l = 0;
+			while (l <= j)
+			{
+				new_data[l] = data[l];
+				l++;
+			}
+			free(data);
+			data = new_data;
+		}
+		data[j] = ft_strncpy(prompt, k);
 		prompt += k;
-		i++;
+		j++;
+		data[j] = NULL;
 	}
-	data[i] = NULL;
 	return (data);
 }
 
@@ -244,11 +292,8 @@ void	display_command(t_command *cmd)
 		printf("No command\n");
 		return ;
 	}
-	// Display input redirects
 	display_input_redirects(cmd->input_redirect);
-	// Display output redirects
 	display_output_redirects(cmd->output_redirect);
-	// Display arguments
 	if (cmd->argv)
 	{
 		i = 0;
@@ -269,8 +314,6 @@ void	display_command_list(t_command *cmd_list)
 		cmd_list = cmd_list->next;
 	}
 }
-
-#include <stdlib.h>
 
 void	free_input_redirect(t_input_redirect *input_redirect)
 {
@@ -341,7 +384,6 @@ int	main(int argc, char **argv, char **envp)
 	char		*prompt;
 	char		**data;
 	t_command	*cmd_list;
-	int			i;
 
 	(void)argc;
 	(void)argv;
@@ -358,14 +400,7 @@ int	main(int argc, char **argv, char **envp)
 			if (!data)
 				return (0);
 			cmd_list = create_command_list(data);
-			i = 0;
-			while (data[i])
-			{
-				// printf("%s\n", data[i]);
-				free(data[i]);
-				i++;
-			}
-			free(data);
+			free_char_list(data);
 			if (!cmd_list)
 				return (0);
 			display_command_list(cmd_list);

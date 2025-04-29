@@ -1,4 +1,3 @@
-adjacent quoted strings
 redirection error
-invalid tokens
-variable expansion
+variable expansion + quote removal
+heredoc logic
