@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:27:05 by almeddah          #+#    #+#             */
-/*   Updated: 2025/05/02 17:11:15 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/05/02 18:41:32 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,10 @@ t_command	*create_command_list(char **data)
 	while (*data)
 	{
 		if (!ft_strcmp(*data, "|"))
+		{
+			printf("pipe error\n");
 			return (NULL);
+		}
 		i = 0;
 		while (data[i] && ft_strcmp(data[i], "|"))
 			i++;
@@ -142,15 +145,6 @@ t_command	*create_command_list(char **data)
 						create_output_redirect(data[i], data[i + 1]));
 				i += 2;
 			}
-			// else if (!ft_strcmp(data[i], ">") || !ft_strcmp(data[i], ">>"))
-			// {
-			// 	if (!data[i + 1])
-			// 		return (NULL);
-			// 	else
-			// 		ft_add_back((void **)&(new_command->output_redirect),
-			// 			create_output_redirect(data[i], data[i + 1]));
-			// 	i += 2;
-			// }
 			else
 			{
 				new_command->argv[j] = ft_strdup(data[i]);
@@ -162,7 +156,14 @@ t_command	*create_command_list(char **data)
 		ft_add_back((void **)&command_list, new_command);
 		data += i;
 		if (*data)
+		{
+			if (!ft_strcmp(*data, "|") && (!*(data + 1)))
+			{
+				printf("pipe erreur\n");
+				return (NULL);
+			}
 			data++;
+		}
 	}
 	return (command_list);
 }
@@ -274,9 +275,12 @@ char	**create_data(char *prompt)
 			free(data);
 			data = new_data;
 		}
-		data[j] = ft_strncpy(prompt, k);
+		if (k)
+		{
+			data[j] = ft_strncpy(prompt, k);
+			j++;
+		}
 		prompt += k;
-		j++;
 		data[j] = NULL;
 	}
 	return (data);
@@ -402,6 +406,16 @@ void	free_command_list(t_command *cmd_list)
 	}
 }
 
+// void	print_data(char **data)
+// {
+// 	while (*data)
+// 	{
+// 		printf("%s\n", *data);
+// 		data++;
+// 	}
+// 	printf("%p\n", *data);
+// }
+
 int	main(int argc, char **argv, char **envp)
 {
 	char		*prompt;
@@ -422,6 +436,7 @@ int	main(int argc, char **argv, char **envp)
 			data = create_data(prompt);
 			if (!data)
 				return (0);
+			// print_data(data);
 			cmd_list = create_command_list(data);
 			free_char_list(data);
 			if (!cmd_list)
