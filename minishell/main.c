@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:27:05 by almeddah          #+#    #+#             */
-/*   Updated: 2025/04/29 15:29:05 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/05/02 17:11:15 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,15 @@ t_output_redirect	*create_output_redirect(char *str1, char *str2)
 	return (new_redir);
 }
 
+int	is_redirection(char *str)
+{
+	if (!ft_strcmp(str, ">") || !ft_strcmp(str, ">>"))
+		return (1);
+	if (!ft_strcmp(str, "<") || !ft_strcmp(str, "<<"))
+		return (2);
+	return (0);
+}
+
 t_command	*create_command_list(char **data)
 {
 	t_command	*command_list;
@@ -104,7 +113,7 @@ t_command	*create_command_list(char **data)
 		if (!ft_strcmp(*data, "|"))
 			return (NULL);
 		i = 0;
-		while (data[i] && ft_strcmp(data[i], "|") != 0)
+		while (data[i] && ft_strcmp(data[i], "|"))
 			i++;
 		new_command = malloc(sizeof(t_command));
 		if (!new_command)
@@ -115,26 +124,33 @@ t_command	*create_command_list(char **data)
 		new_command->argv = malloc(sizeof(char *) * (i + 1));
 		i = 0;
 		j = 0;
-		while (data[i] && ft_strcmp(data[i], "|") != 0)
+		while (data[i] && ft_strcmp(data[i], "|"))
 		{
-			if (!ft_strcmp(data[i], "<") || !ft_strcmp(data[i], "<<"))
+			if (is_redirection(data[i]))
 			{
-				if (!data[i + 1])
+				if (!data[i + 1] || is_redirection(data[i + 1])
+					|| !ft_strcmp(data[i + 1], "|"))
+				{
+					printf("redirection error\n");
 					return (NULL);
-				else
+				}
+				else if (is_redirection(data[i]) == 2)
 					ft_add_back((void **)&(new_command->input_redirect),
 						create_input_redirect(data[i], data[i + 1]));
-				i += 2;
-			}
-			else if (!ft_strcmp(data[i], ">") || !ft_strcmp(data[i], ">>"))
-			{
-				if (!data[i + 1])
-					return (NULL);
-				else
+				else if (is_redirection(data[i]) == 1)
 					ft_add_back((void **)&(new_command->output_redirect),
 						create_output_redirect(data[i], data[i + 1]));
 				i += 2;
 			}
+			// else if (!ft_strcmp(data[i], ">") || !ft_strcmp(data[i], ">>"))
+			// {
+			// 	if (!data[i + 1])
+			// 		return (NULL);
+			// 	else
+			// 		ft_add_back((void **)&(new_command->output_redirect),
+			// 			create_output_redirect(data[i], data[i + 1]));
+			// 	i += 2;
+			// }
 			else
 			{
 				new_command->argv[j] = ft_strdup(data[i]);
@@ -188,7 +204,7 @@ void	free_char_list(char **data)
 	i = 0;
 	while (data[i])
 	{
-		printf("%s\n", data[i]);
+		// printf("%s\n", data[i]);
 		free(data[i]);
 		i++;
 	}
@@ -215,9 +231,16 @@ char	**create_data(char *prompt)
 			prompt++;
 		if (*prompt == '|')
 			k++;
+		else if (*prompt == '>' || *prompt == '<')
+		{
+			k++;
+			if (*(prompt + 1) == *prompt)
+				k++;
+		}
 		else
 		{
-			while (prompt[k] && !ft_isspace(prompt[k]) && prompt[k] != '|')
+			while (prompt[k] && !ft_isspace(prompt[k]) && prompt[k] != '|'
+				&& prompt[k] != '<' && prompt[k] != '>')
 			{
 				if (prompt[k] == '\'' || prompt[k] == '"')
 				{
