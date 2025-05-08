@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:25:34 by almeddah          #+#    #+#             */
-/*   Updated: 2025/04/23 14:24:21 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/05/08 21:04:32 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include "readline/history.h"
 # include "readline/readline.h"
 # include "stdio.h"
+# include <fcntl.h>
 
 // typedef struct s_redir
 // {
@@ -44,7 +45,7 @@ typedef struct s_input_redirect
 {
 	struct s_input_redirect		*next;
 	char						*file;
-	char						*delim;
+	int							heredoc;
 }								t_input_redirect;
 
 typedef struct s_command
