@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
+/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:27:05 by almeddah          #+#    #+#             */
-/*   Updated: 2025/05/28 13:23:35 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/05/30 14:35:08 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,35 @@ int	is_redirection(char *str)
 	return (0);
 }
 
-// try to use variable expansion done for herdoc
-int	expand_2(char *data, char **envp)
+char	*expand_variable(char *data, char **envp, int *i)
+{
+	int	j;
+	int	k;
+
+	j = 0;
+	data++;
+	while (data[j] && (ft_isalnum(data[j]) || data[j] == '_'))
+		j++;
+	*i += j + 1;
+	if (!j)
+		return ("$");
+	if (j)
+	{
+		k = 0;
+		while (envp[k])
+		{
+			if (!ft_strncmp(envp[k], data, j) && envp[k][j] == '=')
+				return (envp[k] + j + 1);
+			k++;
+		}
+	}
+	return ("");
+}
+
+int	expanded_token_size(char *data, char **envp)
 {
 	int	i;
 	int	j;
-	int	k;
 
 	i = 0;
 	while (*data)
@@ -36,102 +59,63 @@ int	expand_2(char *data, char **envp)
 			i += nb_quoted_char(data) - 1;
 			data += nb_quoted_char(data) + 1;
 		}
-		else if (*data == '"')
-			data++;
 		else if (*data == '$')
 		{
 			j = 0;
-			data++;
-			while (data[j] && data[j] != '\'' && data[j] != '"'
-				&& data[j] != ' ')
-				j++;
-			if (j)
-			{
-				k = 0;
-				while (envp[k])
-				{
-					if (!ft_strncmp(envp[k], data, j) && envp[k][j] == '=')
-					{
-						i += ft_strlen(envp[k] + j + 1);
-						break ;
-					}
-					k++;
-				}
-			}
+			i += ft_strlen(expand_variable(data, envp, &j));
 			data += j;
 		}
 		else
 		{
-			i++;
+			if (*data != '"')
+				i++;
 			data++;
 		}
 	}
 	return (i);
 }
 
-// try to use variable expansion done for herdoc
-char	*expand(char *data, char **envp)
+void	test(char *result, char *data, char **envp)
 {
-	char	*result;
-	char	*result_;
-	int		j;
-	int		k;
-	int		l;
+	char	*expanded;
+	int		x;
 
-	result = malloc(sizeof(char) * (expand_2(data, envp) + 1));
-	result_ = result;
 	while (*data)
 	{
 		if (*data == '\'')
 		{
 			data++;
 			while (*data != '\'')
-			{
-				*result = *data;
-				data++;
-				result++;
-			}
+				*result++ = *data++;
 			data++;
 		}
 		else if (*data == '"')
 			data++;
 		else if (*data == '$')
 		{
-			j = 0;
-			data++;
-			while (data[j] && data[j] != '\'' && data[j] != '"'
-				&& data[j] != ' ')
-				j++;
-			if (j)
-			{
-				k = 0;
-				while (envp[k])
-				{
-					if (!ft_strncmp(envp[k], data, j) && envp[k][j] == '=')
-					{
-						l = 1;
-						while (envp[k][j + l])
-						{
-							*result = envp[k][j + l];
-							result++;
-							l++;
-						}
-						break ;
-					}
-					k++;
-				}
-			}
-			data += j;
+			x = 0;
+			expanded = expand_variable(data, envp, &x);
+			while (*expanded)
+				*result++ = *expanded++;
+			data += x;
 		}
 		else
-		{
-			*result = *data;
-			result++;
-			data++;
-		}
+			*result++ = *data++;
 	}
-	*result = '\0';
-	return (result_);
+}
+
+char	*expand_token(char *data, char **envp)
+{
+	char	*result;
+	int		size;
+
+	size = expanded_token_size(data, envp);
+	result = malloc(sizeof(char) * (size + 1));
+	if (!result)
+		return (NULL);
+	test(result, data, envp);
+	result[size] = '\0';
+	return (result);
 }
 
 t_command	*create_command_list(char **data, char **envp)
@@ -200,7 +184,8 @@ t_command	*create_command_list(char **data, char **envp)
 					}
 					if (is_redirection(data[i]) == 1)
 					{
-						redirect = create_output_redirect(data[i], data[i + 1]);
+						redirect = create_output_redirect(data[i], data[i + 1],
+								envp);
 						if (!redirect)
 						{
 							free_command_list(command_list);
@@ -214,7 +199,7 @@ t_command	*create_command_list(char **data, char **envp)
 			}
 			else
 			{
-				new_command->argv[j] = expand(data[i], envp);
+				new_command->argv[j] = expand_token(data[i], envp);
 				j++;
 				i++;
 			}
@@ -234,112 +219,6 @@ t_command	*create_command_list(char **data, char **envp)
 		}
 	}
 	return (command_list);
-}
-
-char	**create_new_data(char **data, int *i, int j)
-{
-	int		l;
-	char	**new_data;
-
-	*i += 10;
-	new_data = malloc(sizeof(char *) * (*i));
-	if (!new_data)
-	{
-		printf("new data allocation error\n");
-		free_char_list(data);
-		return (NULL);
-	}
-	l = 0;
-	while (l <= j)
-	{
-		new_data[l] = data[l];
-		l++;
-	}
-	free(data);
-	return (new_data);
-}
-
-int	parse_prompt(char **prompt, char **data, int j)
-{
-	int	k;
-
-	k = 0;
-	while (**prompt && ft_isspace(**prompt))
-		(*prompt)++;
-	if (**prompt == '|')
-		k++;
-	else if (**prompt == '>' || **prompt == '<')
-	{
-		k++;
-		if (*(*prompt + 1) == **prompt)
-			k++;
-	}
-	else
-	{
-		while ((*prompt)[k] && !ft_isspace((*prompt)[k]) && (*prompt)[k] != '|'
-			&& (*prompt)[k] != '<' && (*prompt)[k] != '>')
-		{
-			if ((*prompt)[k] == '\'' || (*prompt)[k] == '"')
-			{
-				if (!nb_quoted_char(*prompt + k))
-				{
-					printf("unclosed quote\n");
-					data[j] = NULL;
-					free_char_list(data);
-					return (-1);
-				}
-				k += nb_quoted_char(*prompt + k);
-			}
-			k++;
-		}
-	}
-	return (k);
-}
-
-int	copy_to_data(char **prompt, int k, int j, char **data)
-{
-	if (k)
-	{
-		data[j] = ft_strncpy(*prompt, k);
-		if (!data[j])
-		{
-			free_char_list(data);
-			return (-1);
-		}
-		j++;
-	}
-	*prompt += k;
-	data[j] = NULL;
-	return (j);
-}
-
-char	**create_data(char *prompt)
-{
-	char	**data;
-	int		i;
-	int		j;
-	int		k;
-
-	i = 10;
-	j = 0;
-	data = malloc(sizeof(char *) * i);
-	if (!data)
-	{
-		printf("data allocation error\n");
-		return (NULL);
-	}
-	while (*prompt)
-	{
-		if (j >= i - 1)
-			data = create_new_data(data, &i, j);
-		k = parse_prompt(&prompt, data, j);
-		if (k == -1)
-			return (NULL);
-		j = copy_to_data(&prompt, k, j, data);
-		if (j == -1)
-			return (NULL);
-	}
-	return (data);
 }
 
 int	main(int argc, char **argv, char **envp)

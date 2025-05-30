@@ -1,6 +1,7 @@
 NAME = Minishell
 
-SRCS = main.c free.c utils.c redirection.c heredoc_creation.c temp_display.c
+SRCS = main.c free.c utils.c redirection.c heredoc_creation.c parse_to_data.c \
+temp_display.c
 OBJS = $(SRCS:.c=.o)
 
 

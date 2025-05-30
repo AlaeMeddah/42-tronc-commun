@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
+/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:11:42 by almeddah          #+#    #+#             */
-/*   Updated: 2025/05/13 19:26:43 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/05/30 14:22:05 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_input_redirect	*create_input_redirect(char *str1, char *str2, char **envp)
 	new_redir->file = NULL;
 	new_redir->heredoc = 0;
 	if (!ft_strcmp(str1, "<"))
-		new_redir->file = ft_strdup(str2);
+		new_redir->file = expand_token(str2, envp);
 	else
 	{
 		new_redir->file = heredoc(str2, envp);
@@ -37,7 +37,7 @@ t_input_redirect	*create_input_redirect(char *str1, char *str2, char **envp)
 	return (new_redir);
 }
 
-t_output_redirect	*create_output_redirect(char *str1, char *str2)
+t_output_redirect	*create_output_redirect(char *str1, char *str2, char **envp)
 {
 	t_output_redirect	*new_redir;
 
@@ -49,7 +49,7 @@ t_output_redirect	*create_output_redirect(char *str1, char *str2)
 		printf("redirection output allocation error\n");
 		return (NULL);
 	}
-	new_redir->file = ft_strdup(str2);
+	new_redir->file = expand_token(str2, envp);
 	new_redir->append = 0;
 	if (!ft_strcmp(str1, ">>"))
 		new_redir->append = 1;

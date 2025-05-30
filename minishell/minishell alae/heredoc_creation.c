@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_creation.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
+/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 19:25:59 by almeddah          #+#    #+#             */
-/*   Updated: 2025/05/28 11:49:35 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/05/30 13:46:46 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,32 +39,6 @@ char	*trim_quote(char *str, int *trimmed)
 	}
 	*res = '\0';
 	return (res_);
-}
-
-char	*expand_variable(char *data, char **envp, int *i)
-{
-	int	j;
-	int	k;
-
-	j = 0;
-	data++;
-	while (data[j] && data[j] != '\'' && data[j] != '"' && data[j] != ' '
-		&& data[j] != '$')
-		j++;
-	*i += j + 1;
-	if (!j)
-		return ("$");
-	if (j)
-	{
-		k = 0;
-		while (envp[k])
-		{
-			if (!ft_strncmp(envp[k], data, j) && envp[k][j] == '=')
-				return (envp[k] + j + 1);
-			k++;
-		}
-	}
-	return ("");
 }
 
 char	*heredoc_file_creation(void)
@@ -101,7 +75,6 @@ void	paste_to_heredoc(char *str, int quote, int fd, char **envp)
 	i = 0;
 	while (str[i])
 	{
-		printf("%s\n", str + i);
 		if (str[i] == '$' && !quote)
 			ft_putstr_fd(expand_variable(str + i, envp, &i), fd);
 		else
@@ -118,9 +91,9 @@ int	stop_heredoc(char *prompt, char *delim, int y)
 	if (!prompt)
 	{
 		printf("bash: warning: here-document at line "
-			"%d delimited by end-of-file (wanted %s)\n",
-			y,
-			delim);
+				"%d delimited by end-of-file (wanted %s)\n",
+				y,
+				delim);
 		return (1);
 	}
 	if (!ft_strcmp(prompt, delim))
@@ -154,5 +127,6 @@ char	*heredoc(char *delim, char **envp)
 		free(prompt);
 	}
 	close(fd);
+	free(delim);
 	return (filename);
 }
