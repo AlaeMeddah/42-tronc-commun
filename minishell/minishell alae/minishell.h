@@ -6,7 +6,7 @@
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:25:34 by almeddah          #+#    #+#             */
-/*   Updated: 2025/05/30 14:22:29 by alae             ###   ########.fr       */
+/*   Updated: 2025/06/05 17:37:19 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,14 @@ char							*ft_strncpy(char *src, int n);
 void							ft_add_back(void **list, void *new);
 void							*ft_last(void *list);
 int								nb_quoted_char(char *str);
-t_output_redirect				*create_output_redirect(char *str1, char *str2,
-									char **envp);
-t_input_redirect				*create_input_redirect(char *str1, char *str2,
-									char **envp);
 char							*heredoc(char *delim, char **envp);
 char							**create_data(char *prompt);
 char							*expand_variable(char *data, char **envp,
 									int *i);
 char							*expand_token(char *data, char **envp);
+int								create_redirect(char **data, char **envp, int i,
+									t_command *new_command);
+int								is_redirection(char *str);
 
 void							display_command_list(t_command *cmd_list);
 void							print_data(char **data);

@@ -6,20 +6,11 @@
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:27:05 by almeddah          #+#    #+#             */
-/*   Updated: 2025/05/30 14:35:08 by alae             ###   ########.fr       */
+/*   Updated: 2025/06/05 17:35:42 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	is_redirection(char *str)
-{
-	if (!ft_strcmp(str, ">") || !ft_strcmp(str, ">>"))
-		return (1);
-	if (!ft_strcmp(str, "<") || !ft_strcmp(str, "<<"))
-		return (2);
-	return (0);
-}
 
 char	*expand_variable(char *data, char **envp, int *i)
 {
@@ -118,103 +109,111 @@ char	*expand_token(char *data, char **envp)
 	return (result);
 }
 
+t_command	*create_new_command(t_command *command_list, int i)
+{
+	t_command	*new_command;
+
+	new_command = malloc(sizeof(t_command));
+	if (!new_command)
+	{
+		printf("command allocation error\n");
+		free_command_list(command_list);
+		return (NULL);
+	}
+	new_command->next = NULL;
+	new_command->input_redirect = NULL;
+	new_command->output_redirect = NULL;
+	new_command->argv = malloc(sizeof(char *) * (i + 1));
+	if (!new_command->argv)
+	{
+		printf("command arg allocation error\n");
+		free_command_list(command_list);
+		return (NULL);
+	}
+	return (new_command);
+}
+
+int	redirection_error(char **data, int i)
+{
+	if (!data[i + 1] || is_redirection(data[i + 1]) || !ft_strcmp(data[i + 1],
+			"|"))
+	{
+		printf("redirection error\n");
+		return (1);
+	}
+	return (0);
+}
+
+int	handle_new_command(char **data, char **envp, int *i, t_command *new_command)
+{
+	int	j;
+
+	*i = 0;
+	j = 0;
+	while (data[*i] && ft_strcmp(data[*i], "|"))
+	{
+		if (is_redirection(data[*i]))
+		{
+			if (redirection_error(data, *i))
+				return (0);
+			else
+			{
+				if (!create_redirect(data, envp, *i, new_command))
+					return (0);
+			}
+			*i += 2;
+		}
+		else
+			new_command->argv[j++] = expand_token(data[(*i)++], envp);
+	}
+	new_command->argv[j] = NULL;
+	return (1);
+}
+
+int	add_command_to_list(char **data, char **envp, int *i,
+		t_command **command_list)
+{
+	t_command	*new_command;
+
+	*i = 0;
+	while (data[*i] && ft_strcmp(data[*i], "|"))
+		(*i)++;
+	new_command = create_new_command(*command_list, *i);
+	if (!new_command)
+		return (0);
+	if (!handle_new_command(data, envp, i, new_command))
+	{
+		free_command_list(*command_list);
+		return (0);
+	}
+	ft_add_back((void **)command_list, new_command);
+	return (1);
+}
+
+void	*pipe_error(t_command *command_list)
+{
+	printf("pipe error\n");
+	free_command_list(command_list);
+	return (NULL);
+}
+
 t_command	*create_command_list(char **data, char **envp)
 {
 	t_command	*command_list;
-	t_command	*new_command;
-	void		*redirect;
 	int			i;
-	int			j;
 
 	command_list = NULL;
 	while (*data)
 	{
 		if (!ft_strcmp(*data, "|"))
-		{
-			printf("pipe error\n");
-			free_command_list(command_list);
+			return (pipe_error(command_list));
+		if (!add_command_to_list(data, envp, &i, &command_list))
 			return (NULL);
-		}
-		i = 0;
-		while (data[i] && ft_strcmp(data[i], "|"))
-			i++;
-		new_command = malloc(sizeof(t_command));
-		if (!new_command)
-		{
-			printf("command allocation error\n");
-			free_command_list(command_list);
-			return (NULL);
-		}
-		new_command->next = NULL;
-		new_command->input_redirect = NULL;
-		new_command->output_redirect = NULL;
-		new_command->argv = malloc(sizeof(char *) * (i + 1));
-		if (!new_command->argv)
-		{
-			printf("command arg allocation error\n");
-			free_command_list(command_list);
-			return (NULL);
-		}
-		i = 0;
-		j = 0;
-		while (data[i] && ft_strcmp(data[i], "|"))
-		{
-			if (is_redirection(data[i]))
-			{
-				if (!data[i + 1] || is_redirection(data[i + 1])
-					|| !ft_strcmp(data[i + 1], "|"))
-				{
-					printf("redirection error\n");
-					free_command_list(command_list);
-					return (NULL);
-				}
-				else
-				{
-					if (is_redirection(data[i]) == 2)
-					{
-						redirect = create_input_redirect(data[i], data[i + 1],
-								envp);
-						if (!redirect)
-						{
-							free_command_list(command_list);
-							return (NULL);
-						}
-						ft_add_back((void **)&(new_command->input_redirect),
-							redirect);
-					}
-					if (is_redirection(data[i]) == 1)
-					{
-						redirect = create_output_redirect(data[i], data[i + 1],
-								envp);
-						if (!redirect)
-						{
-							free_command_list(command_list);
-							return (NULL);
-						}
-						ft_add_back((void **)&(new_command->output_redirect),
-							redirect);
-					}
-				}
-				i += 2;
-			}
-			else
-			{
-				new_command->argv[j] = expand_token(data[i], envp);
-				j++;
-				i++;
-			}
-		}
-		new_command->argv[j] = NULL;
-		ft_add_back((void **)&command_list, new_command);
 		data += i;
 		if (*data)
 		{
 			if (!ft_strcmp(*data, "|") && (!*(data + 1)))
-			{
-				printf("pipe erreur\n");
-				free_command_list(command_list);
-				return (NULL);
-			}
+				return (pipe_error(command_list));
 			data++;
 		}
 	}
