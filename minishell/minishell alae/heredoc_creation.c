@@ -6,7 +6,7 @@
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 19:25:59 by almeddah          #+#    #+#             */
-/*   Updated: 2025/05/30 13:46:46 by alae             ###   ########.fr       */
+/*   Updated: 2025/06/13 10:06:50 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ char	*heredoc_file_creation(void)
 	}
 }
 
-void	paste_to_heredoc(char *str, int quote, int fd, char **envp)
+void	paste_to_heredoc(char *str, int quote, int fd, t_data data)
 {
 	int	i;
 
@@ -76,7 +76,7 @@ void	paste_to_heredoc(char *str, int quote, int fd, char **envp)
 	while (str[i])
 	{
 		if (str[i] == '$' && !quote)
-			ft_putstr_fd(expand_variable(str + i, envp, &i), fd);
+			ft_putstr_fd(expand_variable(str + i, data, &i), fd);
 		else
 		{
 			ft_putchar_fd(str[i], fd);
@@ -104,7 +104,7 @@ int	stop_heredoc(char *prompt, char *delim, int y)
 	return (0);
 }
 
-char	*heredoc(char *delim, char **envp)
+char	*heredoc(char *delim, t_data data)
 {
 	char	*filename;
 	int		fd;
@@ -123,7 +123,7 @@ char	*heredoc(char *delim, char **envp)
 		y++;
 		if (stop_heredoc(prompt, delim, y))
 			break ;
-		paste_to_heredoc(prompt, quote, fd, envp);
+		paste_to_heredoc(prompt, quote, fd, data);
 		free(prompt);
 	}
 	close(fd);

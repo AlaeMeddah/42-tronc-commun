@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_to_data.c                                    :+:      :+:    :+:   */
+/*   token_list.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 13:17:00 by alae              #+#    #+#             */
-/*   Updated: 2025/05/30 13:17:20 by alae             ###   ########.fr       */
+/*   Updated: 2025/06/13 09:37:08 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**create_new_data(char **data, int *i, int j)
+char	**create_new_list(char **data, int *i, int j)
 {
 	int		l;
 	char	**new_data;
@@ -78,7 +78,7 @@ int	parse_prompt(char **prompt, char **data, int j)
 	return (k);
 }
 
-int	copy_to_data(char **prompt, int k, int j, char **data)
+int	copy_to_list(char **prompt, int k, int j, char **data)
 {
 	if (k)
 	{
@@ -95,7 +95,7 @@ int	copy_to_data(char **prompt, int k, int j, char **data)
 	return (j);
 }
 
-char	**create_data(char *prompt)
+char	**create_token_list(char *prompt)
 {
 	char	**data;
 	int		i;
@@ -113,11 +113,11 @@ char	**create_data(char *prompt)
 	while (*prompt)
 	{
 		if (j >= i - 1)
-			data = create_new_data(data, &i, j);
+			data = create_new_list(data, &i, j);
 		k = parse_prompt(&prompt, data, j);
 		if (k == -1)
 			return (NULL);
-		j = copy_to_data(&prompt, k, j, data);
+		j = copy_to_list(&prompt, k, j, data);
 		if (j == -1)
 			return (NULL);
 	}

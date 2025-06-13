@@ -6,105 +6,109 @@
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:27:05 by almeddah          #+#    #+#             */
-/*   Updated: 2025/06/05 17:35:42 by alae             ###   ########.fr       */
+/*   Updated: 2025/06/13 10:21:07 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*expand_variable(char *data, char **envp, int *i)
+char	*expand_variable(char *str, t_data data, int *i)
 {
 	int	j;
 	int	k;
 
 	j = 0;
-	data++;
-	while (data[j] && (ft_isalnum(data[j]) || data[j] == '_'))
+	str++;
+	if (str[j] == '?')
+	{
+		*i += 2;
+		return (ft_itoa(data.exit_code));
+	}
+	while (str[j] && (ft_isalnum(str[j]) || str[j] == '_'))
 		j++;
 	*i += j + 1;
 	if (!j)
 		return ("$");
 	if (j)
 	{
-		k = 0;
-		while (envp[k])
+		k = -1;
+		while (data.envp[++k])
 		{
-			if (!ft_strncmp(envp[k], data, j) && envp[k][j] == '=')
-				return (envp[k] + j + 1);
-			k++;
+			if (!ft_strncmp(data.envp[k], str, j) && data.envp[k][j] == '=')
+				return (data.envp[k] + j + 1);
 		}
 	}
 	return ("");
 }
 
-int	expanded_token_size(char *data, char **envp)
+int	expanded_token_size(char *str, t_data data)
 {
 	int	i;
 	int	j;
 
 	i = 0;
-	while (*data)
+	while (*str)
 	{
-		if (*data == '\'')
+		if (*str == '\'')
 		{
-			i += nb_quoted_char(data) - 1;
-			data += nb_quoted_char(data) + 1;
+			i += nb_quoted_char(str) - 1;
+			str += nb_quoted_char(str) + 1;
 		}
-		else if (*data == '$')
+		else if (*str == '$')
 		{
 			j = 0;
-			i += ft_strlen(expand_variable(data, envp, &j));
-			data += j;
+			i += ft_strlen(expand_variable(str, data, &j));
+			str += j;
 		}
 		else
 		{
-			if (*data != '"')
+			if (*str != '"')
 				i++;
-			data++;
+			str++;
 		}
 	}
 	return (i);
 }
 
-void	test(char *result, char *data, char **envp)
+void	test(char *result, char *str, t_data data)
 {
 	char	*expanded;
 	int		x;
 
-	while (*data)
+	while (*str)
 	{
-		if (*data == '\'')
+		if (*str == '\'')
 		{
-			data++;
-			while (*data != '\'')
-				*result++ = *data++;
-			data++;
+			str++;
+			while (*str != '\'')
+				*result++ = *str++;
+			str++;
 		}
-		else if (*data == '"')
-			data++;
-		else if (*data == '$')
+		else if (*str == '"')
+			str++;
+		else if (*str == '$')
 		{
 			x = 0;
-			expanded = expand_variable(data, envp, &x);
+			expanded = expand_variable(str, data, &x);
 			while (*expanded)
 				*result++ = *expanded++;
-			data += x;
+			str += x;
 		}
 		else
-			*result++ = *data++;
+			*result++ = *str++;
 	}
 }
 
-char	*expand_token(char *data, char **envp)
+char	*expand_token(char *str, t_data data)
 {
 	char	*result;
 	int		size;
 
-	size = expanded_token_size(data, envp);
+	size = expanded_token_size(str, data);
 	result = malloc(sizeof(char) * (size + 1));
 	if (!result)
 		return (NULL);
-	test(result, data, envp);
+	test(result, str, data);
 	result[size] = '\0';
 	return (result);
 }
@@ -144,44 +148,44 @@ int	redirection_error(char **data, int i)
 	return (0);
 }
 
-int	handle_new_command(char **data, char **envp, int *i, t_command *new_command)
+int	handle_new_command(t_data data, int *i, t_command *new_command)
 {
 	int	j;
 
 	*i = 0;
 	j = 0;
-	while (data[*i] && ft_strcmp(data[*i], "|"))
+	while (data.token_list[*i] && ft_strcmp(data.token_list[*i], "|"))
 	{
-		if (is_redirection(data[*i]))
+		if (is_redirection(data.token_list[*i]))
 		{
-			if (redirection_error(data, *i))
+			if (redirection_error(data.token_list, *i))
 				return (0);
 			else
 			{
-				if (!create_redirect(data, envp, *i, new_command))
+				if (!create_redirect(data, *i, new_command))
 					return (0);
 			}
 			*i += 2;
 		}
 		else
-			new_command->argv[j++] = expand_token(data[(*i)++], envp);
+			new_command->argv[j++] = expand_token(data.token_list[(*i)++],
+					data);
 	}
 	new_command->argv[j] = NULL;
 	return (1);
 }
 
-int	add_command_to_list(char **data, char **envp, int *i,
-		t_command **command_list)
+int	add_command_to_list(t_data data, int *i, t_command **command_list)
 {
 	t_command	*new_command;
 
 	*i = 0;
-	while (data[*i] && ft_strcmp(data[*i], "|"))
+	while (data.token_list[*i] && ft_strcmp(data.token_list[*i], "|"))
 		(*i)++;
 	new_command = create_new_command(*command_list, *i);
 	if (!new_command)
 		return (0);
-	if (!handle_new_command(data, envp, i, new_command))
+	if (!handle_new_command(data, i, new_command))
 	{
 		free_command_list(*command_list);
 		return (0);
@@ -197,37 +201,69 @@ void	*pipe_error(t_command *command_list)
 	return (NULL);
 }
 
-t_command	*create_command_list(char **data, char **envp)
+t_command	*create_command_list(t_data data)
 {
 	t_command	*command_list;
 	int			i;
 
 	command_list = NULL;
-	while (*data)
+	while (*data.token_list)
 	{
-		if (!ft_strcmp(*data, "|"))
+		if (!ft_strcmp(*data.token_list, "|"))
 			return (pipe_error(command_list));
-		if (!add_command_to_list(data, envp, &i, &command_list))
+		if (!add_command_to_list(data, &i, &command_list))
 			return (NULL);
-		data += i;
-		if (*data)
+		data.token_list += i;
+		if (*data.token_list)
 		{
-			if (!ft_strcmp(*data, "|") && (!*(data + 1)))
+			if (!ft_strcmp(*data.token_list, "|") && (!*(data.token_list + 1)))
 				return (pipe_error(command_list));
-			data++;
+			data.token_list++;
 		}
 	}
 	return (command_list);
 }
 
+void	handle_sigint(int sig)
+{
+	(void)sig;
+	write(STDOUT_FILENO, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
+}
+
+void	handle_sigquit(int sig)
+{
+	(void)sig;
+}
+
+void	setup_signals(void)
+{
+	struct sigaction	sa;
+
+	sa.sa_handler = handle_sigint;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_RESTART;
+	sigaction(SIGINT, &sa, NULL);
+	sa.sa_handler = handle_sigquit;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	sigaction(SIGQUIT, &sa, NULL);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
-	char		*prompt;
-	char		**data;
-	t_command	*cmd_list;
+	char	*prompt;
+	t_data	data;
 
 	(void)argc;
 	(void)argv;
+	data.exit_code = 0;
+	data.command_list = NULL;
+	data.token_list = NULL;
+	data.envp = envp;
+	setup_signals();
 	while (1)
 	{
 		prompt = readline("$> ");
@@ -236,15 +272,15 @@ int	main(int argc, char **argv, char **envp)
 		if (*prompt)
 		{
 			add_history(prompt);
-			data = create_data(prompt);
-			if (data)
+			data.token_list = create_token_list(prompt);
+			if (data.token_list)
 			{
-				cmd_list = create_command_list(data, envp);
-				free_char_list(data);
-				if (cmd_list)
+				data.command_list = create_command_list(data);
+				free_char_list(data.token_list);
+				if (data.command_list)
 				{
-					display_command_list(cmd_list);
-					free_command_list(cmd_list);
+					display_command_list(data.command_list);
+					free_command_list(data.command_list);
 				}
 			}
 		}
