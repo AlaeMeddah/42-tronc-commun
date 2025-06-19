@@ -1,7 +1,7 @@
 NAME = Minishell
 
-SRCS = main.c
-OBJS = $(SRCS:.c=.o)
+SRCS := $(wildcard *.c)
+OBJS := $(SRCS:.c=.o)
 
 
 LIBFT_DIR = libft

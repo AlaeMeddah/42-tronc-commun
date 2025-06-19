@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:11:42 by almeddah          #+#    #+#             */
-/*   Updated: 2025/06/13 10:05:58 by alae             ###   ########.fr       */
+/*   Updated: 2025/06/13 18:07:31 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,17 @@ t_output_redirect	*create_output_redirect(char *str1, char *str2, t_data data)
 		new_redir->append = 1;
 	new_redir->next = NULL;
 	return (new_redir);
+}
+
+int	redirection_error(char **data, int i)
+{
+	if (!data[i + 1] || is_redirection(data[i + 1]) || !ft_strcmp(data[i + 1],
+			"|"))
+	{
+		printf("redirection error\n");
+		return (1);
+	}
+	return (0);
 }
 
 int	is_redirection(char *str)
