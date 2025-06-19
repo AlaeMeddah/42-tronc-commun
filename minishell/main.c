@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:27:05 by almeddah          #+#    #+#             */
-/*   Updated: 2025/06/19 10:52:45 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/06/19 12:28:53 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,11 @@ int	main(int argc, char **argv, char **envp)
 	// int			i;
 	(void)argc;
 	(void)argv;
+	data.exit_code = 0;
+	data.command_list = NULL;
+	data.token_list = NULL;
+	data.envp = envp;
+	setup_signals();
 	data.exit_code = 0;
 	data.command_list = NULL;
 	data.token_list = NULL;
