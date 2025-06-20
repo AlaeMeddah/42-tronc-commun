@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utilspaf.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minhpham <minhpham@student.42lehavre.fr    +#+  +:+       +#+        */
+/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 19:52:45 by minhpham          #+#    #+#             */
-/*   Updated: 2025/06/19 09:54:15 by minhpham         ###   ########.fr       */
+/*   Updated: 2025/06/20 13:58:35 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,13 @@
 // 	}
 // }
 
-void exec_external(char **argv, char **env)
+void	exec_external(char **argv, char **env)
 {
-	char *path = ft_get_path(argv[0], env);
+	char	*path;
 
+	path = ft_get_path(argv[0], env);
 	if (!path)
 		exit(127);
-
 	execve(path, argv, env);
 	perror(argv[0]);
 	ft_free_tab(argv);
