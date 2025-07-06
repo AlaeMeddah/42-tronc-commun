@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
+/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 18:08:46 by almeddah          #+#    #+#             */
-/*   Updated: 2025/06/13 18:09:40 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/07/06 04:23:24 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ char	*expand_token(char *str, t_data data)
 	int		size;
 
 	size = expanded_token_size(str, data);
+	if (!size)
+		return (NULL);
 	result = malloc(sizeof(char) * (size + 1));
 	if (!result)
 		return (NULL);

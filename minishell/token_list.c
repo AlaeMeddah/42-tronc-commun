@@ -6,7 +6,7 @@
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 13:17:00 by alae              #+#    #+#             */
-/*   Updated: 2025/06/13 09:37:08 by alae             ###   ########.fr       */
+/*   Updated: 2025/07/06 01:34:04 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,11 @@ int	parse_prompt(char **prompt, char **data, int j)
 	{
 		while ((*prompt)[k] && !ft_isspace((*prompt)[k]) && (*prompt)[k] != '|'
 			&& (*prompt)[k] != '<' && (*prompt)[k] != '>')
+		{
+			if (quoted_token(prompt, k, data, j) == -1)
+				return (-1);
 			k += quoted_token(prompt, k, data, j) + 1;
+		}
 	}
 	return (k);
 }

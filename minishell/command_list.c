@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_list.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
+/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 18:01:32 by almeddah          #+#    #+#             */
-/*   Updated: 2025/06/13 18:07:48 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/07/06 04:22:37 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ int	handle_new_command(t_data data, int *i, t_command *new_command)
 {
 	int	j;
 
-	*i = 0;
 	j = 0;
 	while (data.token_list[*i] && ft_strcmp(data.token_list[*i], "|"))
 	{
@@ -56,8 +55,11 @@ int	handle_new_command(t_data data, int *i, t_command *new_command)
 			*i += 2;
 		}
 		else
-			new_command->argv[j++] = expand_token(data.token_list[(*i)++],
-					data);
+		{
+			new_command->argv[j] = expand_token(data.token_list[(*i)++], data);
+			if (new_command->argv[j])
+				j++;
+		}
 	}
 	new_command->argv[j] = NULL;
 	return (1);
@@ -73,6 +75,7 @@ int	add_command_to_list(t_data data, int *i, t_command **command_list)
 	new_command = create_new_command(*command_list, *i);
 	if (!new_command)
 		return (0);
+	*i = 0;
 	if (!handle_new_command(data, i, new_command))
 	{
 		free_command_list(*command_list);
