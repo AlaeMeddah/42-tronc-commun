@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utilspaf.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: minhpham <minhpham@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 19:52:45 by minhpham          #+#    #+#             */
-/*   Updated: 2025/06/20 13:58:35 by alae             ###   ########.fr       */
+/*   Updated: 2025/07/03 20:19:42 by minhpham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,10 @@
 // 	}
 // }
 
-void	exec_external(char **argv, char **env)
+void exec_external(char **argv, char **env)
 {
-	char	*path;
+	char *path = ft_get_path(argv[0], env);
 
-	path = ft_get_path(argv[0], env);
 	if (!path)
 		exit(127);
 	execve(path, argv, env);
@@ -134,4 +133,54 @@ int	open_file(char *file, int in_or_out, int *error)
 			*error = 3;
 	}
 	return (fd);
+}
+
+char	**convert_env(t_env *env)
+{
+	int		size = env_size(env);
+	char	**envp = malloc(sizeof(char *) * (size + 1));
+	char	*line;
+	int		i = 0;
+
+	while (env)
+	{
+		if (env->value)
+		{
+			line = ft_strjoin(env->key, "=");
+			line = ft_strjoin_free(line, env->value);
+			envp[i++] = line;
+		}
+		env = env->next;
+	}
+	envp[i] = NULL;
+	return (envp);
+}
+
+char	*ft_strjoin_free(char *s1, const char *s2)
+{
+	char	*joined;
+	size_t	len1;
+	size_t	len2;
+	size_t	i;
+	size_t	j;
+
+	if (!s1 && !s2)
+		return (NULL);
+	len1 = s1 ? ft_strlen(s1) : 0;
+	len2 = s2 ? ft_strlen(s2) : 0;
+	joined = malloc(sizeof(char) * (len1 + len2 + 1));
+	if (!joined)
+	{
+		free(s1);
+		return (NULL);
+	}
+	i = -1;
+	while (s1 && s1[++i])
+		joined[i] = s1[i];
+	j = 0;
+	while (s2 && s2[j])
+		joined[i++] = s2[j++];
+	joined[i] = '\0';
+	free(s1); // libération de s1 ici
+	return (joined);
 }

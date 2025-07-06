@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 18:08:46 by almeddah          #+#    #+#             */
-/*   Updated: 2025/07/06 04:23:24 by alae             ###   ########.fr       */
+/*   Updated: 2025/07/06 17:10:05 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,13 @@ int	expanded_token_size(char *str, t_data data)
 {
 	int	i;
 	int	j;
+	int	d_quote;
 
+	d_quote = 0;
 	i = 0;
 	while (*str)
 	{
-		if (*str == '\'')
+		if (*str == '\'' && !d_quote)
 		{
 			i += nb_quoted_char(str) - 1;
 			str += nb_quoted_char(str) + 1;
@@ -64,6 +66,13 @@ int	expanded_token_size(char *str, t_data data)
 		{
 			if (*str != '"')
 				i++;
+			else
+			{
+				if (!d_quote)
+					d_quote = 1;
+				else
+					d_quote = 0;
+			}
 			str++;
 		}
 	}
@@ -74,10 +83,12 @@ void	test(char *result, char *str, t_data data)
 {
 	char	*expanded;
 	int		x;
+	int		d_quote;
 
+	d_quote = 0;
 	while (*str)
 	{
-		if (*str == '\'')
+		if (*str == '\'' && !d_quote)
 		{
 			str++;
 			while (*str != '\'')
@@ -85,7 +96,13 @@ void	test(char *result, char *str, t_data data)
 			str++;
 		}
 		else if (*str == '"')
+		{
+			if (!d_quote)
+				d_quote = 1;
+			else
+				d_quote = 0;
 			str++;
+		}
 		else if (*str == '$')
 		{
 			x = 0;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
+/*   By: minhpham <minhpham@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:25:34 by almeddah          #+#    #+#             */
-/*   Updated: 2025/06/19 12:29:15 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/07/06 14:18:48 by minhpham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,16 @@ typedef struct s_env
 	struct s_env				*next;
 }								t_env;
 
+typedef struct s_path
+{
+	char						**allpath;
+	char						**s_cmd;
+	char						*path_part;
+	char						*exec;
+	char						*tmp;
+	char						*trimmed_cmd;
+}								t_path;
+
 void							free_command_list(t_command *cmd_list);
 void							free_char_list(char **data);
 int								ft_strcmp(const char *s1, const char *s2);
@@ -89,38 +99,38 @@ void							setup_signals(void);
 t_command						*create_command_list(t_data data);
 int								redirection_error(char **data, int i);
 
-void							display_command_list(t_command *cmd_list);
-void							print_data(char **data);
-
-typedef struct s_path
-{
-	char						**allpath;
-	char						**s_cmd;
-	char						*path_part;
-	char						*exec;
-	char						*tmp;
-	char						*trimmed_cmd;
-}								t_path;
-
 int								ft_echo(char **args);
 int								ft_pwd(void);
-int								ft_cd(char **args);
+int								ft_cd(char **args, t_env **env);
 int								ft_exit(char **args, int in_fork);
 int								ft_env(t_env *env);
 int								ft_export(char **args, t_env **env);
 int								is_valid_identifier(const char *key);
 t_env							*find_env(t_env *env, const char *key);
+int								env_size(t_env *env);
+t_env							**env_to_array(t_env *env, int *size);
+void							sort_env_array(t_env **array, int size);
+void							print_export_line(t_env *env);
+void							print_export(t_env *env);
+int								ft_unset(char **args, t_env **env);
 
-int								execute_commands(t_command *cmd_list,
-									char **env);
-
+int								execute_commands(t_command *cmd, t_env **env);
+t_env							*env_new(char *key, char *value);
+t_env							*env_to_list(char **envp);
 char							*ft_get_path(char *cmd, char **env);
 char							*my_getenv(char **env);
-// void	exec(char *cmd, char **env);
 void							exec_external(char **argv, char **env);
 void							exit_handler(int code);
 int								open_file(char *filename, int type, int *error);
 void							ft_free_tab(char **tab);
 void							write_error(char *msg);
+char							**convert_env(t_env *env);
+int								exec_builtin(char **argv, t_env **env,
+									int infork);
+int								is_builtin(char *cmd);
+char							*ft_strjoin_free(char *s1, const char *s2);
+
+// void							display_command_list(t_command *cmd_list);
+// void							print_data(char **data);
 
 #endif

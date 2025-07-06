@@ -91,9 +91,9 @@ int	stop_heredoc(char *prompt, char *delim, int y)
 	if (!prompt)
 	{
 		printf("bash: warning: here-document at line "
-				"%d delimited by end-of-file (wanted %s)\n",
-				y,
-				delim);
+			"%d delimited by end-of-file (wanted %s)\n",
+			y,
+			delim);
 		return (1);
 	}
 	if (!ft_strcmp(prompt, delim))

@@ -1,4 +1,4 @@
-NAME = Minishell
+NAME = minishell
 
 SRCS := $(wildcard *.c)
 OBJS := $(SRCS:.c=.o)
