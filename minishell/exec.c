@@ -13,7 +13,7 @@ int	setup_redirect(t_command *cmd)
 		if (fd == -1)
 			return (perror(in->file), 1);
 		if (dup2(fd, STDIN_FILENO) == -1)
-			return (perror("dup2"), close(fd), 1);
+			return (perror("dup2"), close(fd), 0);
 		close(fd);
 		in = in->next;
 	}
@@ -27,11 +27,11 @@ int	setup_redirect(t_command *cmd)
 		if (fd == -1)
 			return (perror(out->file), 1);
 		if (dup2(fd, STDOUT_FILENO) == -1)
-			return (perror("dup2"), close(fd), 1);
+			return (perror("dup2"), close(fd), 0);
 		close(fd);
 		out = out->next;
 	}
-	return (0);
+	return (1);
 }
 
 int	is_builtin(char *cmd)
@@ -55,8 +55,13 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-int	exec_builtin(t_command *cmd, char **envp)
+int	exec_builtin(t_command *cmd, char **envp, int in_fork)
 {
+	if (!in_fork)
+	{
+		if (!setup_redirect(cmd))
+			return (1);
+	}
 	if (strcmp(cmd->argv[0], "echo") == 0)
 		return (builtin_echo(cmd->argv));
 	if (strcmp(cmd->argv[0], "cd") == 0)
@@ -70,7 +75,11 @@ int	exec_builtin(t_command *cmd, char **envp)
 	if (strcmp(cmd->argv[0], "env") == 0)
 		return (builtin_env(envp));
 	if (strcmp(cmd->argv[0], "exit") == 0)
+	{
+		if (!in_fork)
+			write(STDERR_FILENO, "exit\n", 5);
 		return (builtin_exit(cmd->argv));
+	}
 	return (1);
 }
 
@@ -84,10 +93,10 @@ char	*get_env_value(char **envp, const char *name)
 	while (envp[i])
 	{
 		if (ft_strncmp(envp[i], name, len) == 0 && envp[i][len] == '=')
-			return (envp[i] + len + 1); // Return pointer to value (after '=')
+			return (envp[i] + len + 1);
 		i++;
 	}
-	return (NULL); // Not found
+	return (NULL);
 }
 
 char	*ft_find_path(char *cmd, char **envp)
@@ -129,11 +138,11 @@ int	exec_cmd(t_command *cmd, char **envp)
 {
 	char	*path;
 
-	path = NULL;
-	if (is_builtin(cmd->argv[0]))
-		exit(exec_builtin(cmd, envp));
 	if (!setup_redirect(cmd))
-		path = ft_find_path(cmd->argv[0], envp);
+		exit(1);
+	if (is_builtin(cmd->argv[0]))
+		exit(exec_builtin(cmd, envp, 1));
+	path = ft_find_path(cmd->argv[0], envp);
 	if (!path)
 	{
 		perror(cmd->argv[0]);
@@ -188,11 +197,7 @@ int	setup_cmds(t_command *cmd_list, char **envp)
 	while (cmd)
 	{
 		if (is_builtin(cmd->argv[0]) && !cmd->next && prev_fd == -1)
-		{
-			if (setup_redirect(cmd))
-				return (1);
-			return (exec_builtin(cmd, envp));
-		}
+			return (exec_builtin(cmd, envp, 0));
 		if (cmd->next && pipe(pipefd) == -1)
 			return (perror("pipe"), 1);
 		pid = fork();
