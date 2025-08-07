@@ -6,7 +6,7 @@
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:25:34 by almeddah          #+#    #+#             */
-/*   Updated: 2025/08/05 15:40:48 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/07 15:38:39 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ typedef struct s_data
 
 void							free_command_list(t_command *cmd_list);
 void							free_char_list(char **data);
-int								ft_strcmp(const char *s1, const char *s2);
+int								ft_strcmp(char *s1, char *s2);
 char							*ft_strncpy(char *src, int n);
 void							ft_add_back(void **list, void *new);
 void							*ft_last(void *list);
@@ -105,8 +105,8 @@ int								redirection_error(char **data, int i);
 // int								ft_exit(char **args, int in_fork);
 // int								ft_env(t_env *env);
 // int								ft_export(char **args, t_env **env);
-// int								is_valid_identifier(const char *key);
-// t_env							*find_env(t_env *env, const char *key);
+// int								is_valid_identifier(char *key);
+// t_env							*find_env(t_env *env, char *key);
 // int								env_size(t_env *env);
 // t_env							**env_to_array(t_env *env, int *size);
 // void							sort_env_array(t_env **array, int size);
@@ -130,18 +130,28 @@ int								redirection_error(char **data, int i);
 // int								exec_builtin(char **argv, t_env **env,
 // 									int infork);
 // int								is_builtin(char *cmd);
-// char							*ft_strjoin_free(char *s1, const char *s2);
+// char							*ft_strjoin_free(char *s1, char *s2);
 
 // void							display_command_list(t_command *cmd_list);
 // void							print_data(char **data);
 
-int								setup_cmds(t_command *cmd_list, char **envp);
+int								setup_cmds(t_command *cmd_list, char **envp,
+									int exit_code);
 int								builtin_echo(char **argv);
 int								builtin_cd(char **argv, char **envp);
 int								builtin_pwd(void);
 int								builtin_export(char **argv, char **envp);
 int								builtin_unset(char **argv, char **envp);
 int								builtin_env(char **envp);
-int								builtin_exit(char **argv);
+int								builtin_exit(char **args, int exit_code);
+char							**ft_setenv(char **envp, char *key,
+									char *value);
+char							*ft_getenv(char **envp, char *name);
+int								setup_redirect(t_command *cmd);
+int								exec_builtin(t_command *cmd, char **envp,
+									int in_fork, int exit_code);
+
+int								is_builtin(char *cmd);
+char							*ft_find_path(char *cmd, char **envp);
 
 #endif

@@ -1,147 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/07 14:18:32 by alae              #+#    #+#             */
+/*   Updated: 2025/08/07 15:32:43 by alae             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int	setup_redirect(t_command *cmd)
-{
-	t_input_redirect	*in;
-	t_output_redirect	*out;
-	int					fd;
-
-	in = cmd->input_redirect;
-	while (in)
-	{
-		fd = open(in->file, O_RDONLY);
-		if (fd == -1)
-			return (perror(in->file), 1);
-		if (dup2(fd, STDIN_FILENO) == -1)
-			return (perror("dup2"), close(fd), 0);
-		close(fd);
-		in = in->next;
-	}
-	out = cmd->output_redirect;
-	while (out)
-	{
-		if (out->append)
-			fd = open(out->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		else
-			fd = open(out->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (fd == -1)
-			return (perror(out->file), 1);
-		if (dup2(fd, STDOUT_FILENO) == -1)
-			return (perror("dup2"), close(fd), 0);
-		close(fd);
-		out = out->next;
-	}
-	return (1);
-}
-
-int	is_builtin(char *cmd)
-{
-	if (!cmd)
-		return (0);
-	if (strcmp(cmd, "echo") == 0)
-		return (1);
-	if (strcmp(cmd, "cd") == 0)
-		return (1);
-	if (strcmp(cmd, "pwd") == 0)
-		return (1);
-	if (strcmp(cmd, "export") == 0)
-		return (1);
-	if (strcmp(cmd, "unset") == 0)
-		return (1);
-	if (strcmp(cmd, "env") == 0)
-		return (1);
-	if (strcmp(cmd, "exit") == 0)
-		return (1);
-	return (0);
-}
-
-int	exec_builtin(t_command *cmd, char **envp, int in_fork)
-{
-	if (!in_fork)
-	{
-		if (!setup_redirect(cmd))
-			return (1);
-	}
-	if (strcmp(cmd->argv[0], "echo") == 0)
-		return (builtin_echo(cmd->argv));
-	if (strcmp(cmd->argv[0], "cd") == 0)
-		return (builtin_cd(cmd->argv, envp));
-	if (strcmp(cmd->argv[0], "pwd") == 0)
-		return (builtin_pwd());
-	if (strcmp(cmd->argv[0], "export") == 0)
-		return (builtin_export(cmd->argv, envp));
-	if (strcmp(cmd->argv[0], "unset") == 0)
-		return (builtin_unset(cmd->argv, envp));
-	if (strcmp(cmd->argv[0], "env") == 0)
-		return (builtin_env(envp));
-	if (strcmp(cmd->argv[0], "exit") == 0)
-	{
-		if (!in_fork)
-			write(STDERR_FILENO, "exit\n", 5);
-		return (builtin_exit(cmd->argv));
-	}
-	return (1);
-}
-
-char	*get_env_value(char **envp, const char *name)
-{
-	size_t	len;
-	int		i;
-
-	len = ft_strlen(name);
-	i = 0;
-	while (envp[i])
-	{
-		if (ft_strncmp(envp[i], name, len) == 0 && envp[i][len] == '=')
-			return (envp[i] + len + 1);
-		i++;
-	}
-	return (NULL);
-}
-
-char	*ft_find_path(char *cmd, char **envp)
-{
-	char	*path_env;
-	char	**paths;
-	int		i;
-	char	*temp;
-	char	*full_path;
-
-	path_env = get_env_value(envp, "PATH");
-	if (!path_env)
-		return (NULL);
-	// weird shit
-	paths = ft_split(path_env, ":");
-	// free path_env;
-	if (!paths)
-		return (NULL);
-	i = 0;
-	while (paths[i])
-	{
-		temp = ft_strjoin(paths[i], "/");
-		full_path = ft_strjoin(temp, cmd);
-		free(temp);
-		if (access(full_path, X_OK) == 0)
-		{
-			// ft_free_split(paths);
-			printf("%s\n", full_path);
-			return (full_path);
-		}
-		free(full_path);
-		i++;
-	}
-	// ft_free_split(paths);
-	return (NULL);
-}
-
-int	exec_cmd(t_command *cmd, char **envp)
+int	exec_cmd(t_command *cmd, char **envp, int exit_code)
 {
 	char	*path;
 
 	if (!setup_redirect(cmd))
 		exit(1);
 	if (is_builtin(cmd->argv[0]))
-		exit(exec_builtin(cmd, envp, 1));
+		exit(exec_builtin(cmd, envp, 1, exit_code));
 	path = ft_find_path(cmd->argv[0], envp);
 	if (!path)
 	{
@@ -150,19 +28,20 @@ int	exec_cmd(t_command *cmd, char **envp)
 	}
 	execve(path, cmd->argv, envp);
 	perror(cmd->argv[0]);
+	free(path);
 	exit(127);
 }
 
-int	get_exit_status(pid_t pid, pid_t last_pid, int status, int last_exit_status)
+int	get_exit_status(pid_t pid, pid_t last_pid, int status, int exit_code)
 {
 	int	sig;
 
 	if (pid == last_pid)
 	{
 		if (WIFEXITED(status))
-			last_exit_status = WEXITSTATUS(status);
+			exit_code = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
-			last_exit_status = 128 + WTERMSIG(status);
+			exit_code = 128 + WTERMSIG(status);
 	}
 	if (WIFSIGNALED(status))
 	{
@@ -179,10 +58,10 @@ int	get_exit_status(pid_t pid, pid_t last_pid, int status, int last_exit_status)
 			write(STDOUT_FILENO, "\n", 1);
 		}
 	}
-	return (last_exit_status);
+	return (exit_code);
 }
 
-int	setup_cmds(t_command *cmd_list, char **envp)
+int	setup_cmds(t_command *cmd_list, char **envp, int exit_code)
 {
 	int			prev_fd;
 	int			pipefd[2];
@@ -190,14 +69,19 @@ int	setup_cmds(t_command *cmd_list, char **envp)
 	pid_t		pid;
 	pid_t		last_pid;
 	int			status;
-	int			last;
 
 	prev_fd = -1;
 	cmd = cmd_list;
 	while (cmd)
 	{
 		if (is_builtin(cmd->argv[0]) && !cmd->next && prev_fd == -1)
-			return (exec_builtin(cmd, envp, 0));
+		{
+			signal(SIGINT, SIG_DFL);
+			signal(SIGQUIT, SIG_DFL);
+			exit_code = exec_builtin(cmd, envp, 0, exit_code);
+			setup_signals();
+			return (exit_code);
+		}
 		if (cmd->next && pipe(pipefd) == -1)
 			return (perror("pipe"), 1);
 		pid = fork();
@@ -205,6 +89,8 @@ int	setup_cmds(t_command *cmd_list, char **envp)
 			return (perror("pid"), 1);
 		if (pid == 0)
 		{
+			signal(SIGINT, SIG_DFL);
+			signal(SIGQUIT, SIG_DFL);
 			if (prev_fd != -1)
 			{
 				dup2(prev_fd, 0);
@@ -216,10 +102,12 @@ int	setup_cmds(t_command *cmd_list, char **envp)
 				close(pipefd[0]);
 				close(pipefd[1]);
 			}
-			exec_cmd(cmd, envp);
+			exec_cmd(cmd, envp, exit_code);
 		}
 		else
 		{
+			signal(SIGINT, SIG_IGN);
+			signal(SIGQUIT, SIG_IGN);
 			last_pid = pid;
 			if (prev_fd != -1)
 				close(prev_fd);
@@ -234,9 +122,9 @@ int	setup_cmds(t_command *cmd_list, char **envp)
 	pid = waitpid(-1, &status, 0);
 	while (pid > 0)
 	{
-		last = get_exit_status(pid, last_pid, status, last);
+		exit_code = get_exit_status(pid, last_pid, status, exit_code);
 		pid = waitpid(-1, &status, 0);
 	}
 	setup_signals();
-	return (last);
+	return (exit_code);
 }
