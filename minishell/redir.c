@@ -6,7 +6,7 @@
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 13:40:27 by alae              #+#    #+#             */
-/*   Updated: 2025/08/07 13:55:13 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/08 15:55:37 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,12 @@ int	setup_out_redirect(t_command *cmd)
 		else
 			fd = open(out->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd == -1)
-			return (perror(out->file), 1);
-		if (dup2(fd, STDOUT_FILENO) == -1)
-			return (perror("dup2"), close(fd), 0);
+			return (perror(out->file), 0);
+		if (ft_strcmp(cmd->argv[0], "echo") != 0)
+		{
+			if (dup2(fd, STDOUT_FILENO) == -1)
+				return (perror("dup2"), close(fd), 0);
+		}
 		close(fd);
 		out = out->next;
 	}
@@ -44,9 +47,12 @@ int	setup_in_redirect(t_command *cmd)
 	{
 		fd = open(in->file, O_RDONLY);
 		if (fd == -1)
-			return (perror(in->file), 1);
-		if (dup2(fd, STDIN_FILENO) == -1)
-			return (perror("dup2"), close(fd), 0);
+			return (perror(in->file), 0);
+		if (ft_strcmp(cmd->argv[0], "echo") != 0)
+		{
+			if (dup2(fd, STDIN_FILENO) == -1)
+				return (perror("dup2"), close(fd), 0);
+		}
 		close(fd);
 		in = in->next;
 	}

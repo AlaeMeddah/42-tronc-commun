@@ -6,7 +6,7 @@
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 13:17:00 by alae              #+#    #+#             */
-/*   Updated: 2025/07/06 01:34:04 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/08 15:00:39 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	**create_new_list(char **data, int *i, int j)
 	new_data = malloc(sizeof(char *) * (*i));
 	if (!new_data)
 	{
-		printf("new data allocation error\n");
+		ft_putstr_fd("new data allocation error\n", 2);
 		free_char_list(data);
 		return (NULL);
 	}
@@ -45,7 +45,7 @@ int	quoted_token(char **prompt, int k, char **data, int j)
 		x = nb_quoted_char(*prompt + k);
 		if (!x)
 		{
-			printf("unclosed quote\n");
+			ft_putstr_fd("unclosed quote\n", 2);
 			data[j] = NULL;
 			free_char_list(data);
 			return (-1);
@@ -111,7 +111,7 @@ char	**create_token_list(char *prompt)
 	data = malloc(sizeof(char *) * i);
 	if (!data)
 	{
-		printf("data allocation error\n");
+		ft_putstr_fd("data allocation error\n", 2);
 		return (NULL);
 	}
 	while (*prompt)

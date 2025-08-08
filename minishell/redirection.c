@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
+/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:11:42 by almeddah          #+#    #+#             */
-/*   Updated: 2025/06/13 18:07:31 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/08/08 14:59:15 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_input_redirect	*create_input_redirect(char *str1, char *str2, t_data data)
 	new_redir = malloc(sizeof(t_input_redirect));
 	if (!new_redir)
 	{
-		printf("redirection input allocation error\n");
+		ft_putstr_fd("redirection input allocation error\n", 2);
 		return (NULL);
 	}
 	new_redir->file = NULL;
@@ -46,7 +46,7 @@ t_output_redirect	*create_output_redirect(char *str1, char *str2, t_data data)
 	new_redir = malloc(sizeof(t_output_redirect));
 	if (!new_redir)
 	{
-		printf("redirection output allocation error\n");
+		ft_putstr_fd("redirection output allocation error\n", 2);
 		return (NULL);
 	}
 	new_redir->file = expand_token(str2, data);
@@ -62,7 +62,7 @@ int	redirection_error(char **data, int i)
 	if (!data[i + 1] || is_redirection(data[i + 1]) || !ft_strcmp(data[i + 1],
 			"|"))
 	{
-		printf("redirection error\n");
+		ft_putstr_fd("redirection error\n", 2);
 		return (1);
 	}
 	return (0);

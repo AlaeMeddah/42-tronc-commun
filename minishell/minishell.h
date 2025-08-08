@@ -6,7 +6,7 @@
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:25:34 by almeddah          #+#    #+#             */
-/*   Updated: 2025/08/07 15:38:39 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/08 15:02:58 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,12 +135,11 @@ int								redirection_error(char **data, int i);
 // void							display_command_list(t_command *cmd_list);
 // void							print_data(char **data);
 
-int								setup_cmds(t_command *cmd_list, char **envp,
-									int exit_code);
+int								setup_cmds(t_data *data);
 int								builtin_echo(char **argv);
 int								builtin_cd(char **argv, char **envp);
 int								builtin_pwd(void);
-int								builtin_export(char **argv, char **envp);
+int								builtin_export(char **argv, char ***envp);
 int								builtin_unset(char **argv, char **envp);
 int								builtin_env(char **envp);
 int								builtin_exit(char **args, int exit_code);
@@ -148,10 +147,15 @@ char							**ft_setenv(char **envp, char *key,
 									char *value);
 char							*ft_getenv(char **envp, char *name);
 int								setup_redirect(t_command *cmd);
-int								exec_builtin(t_command *cmd, char **envp,
+int								exec_builtin(t_command *cmd, char ***envp,
 									int in_fork, int exit_code);
 
 int								is_builtin(char *cmd);
 char							*ft_find_path(char *cmd, char **envp);
+void							fork_child(t_command *cmd, t_data *data,
+									int *prev_fd, int pipefd[2]);
+int								fork_parent(t_command *cmd, int pid,
+									int *prev_fd, int pipefd[2]);
+char							**add_var_to_env(char **envp, char *new_var);
 
 #endif

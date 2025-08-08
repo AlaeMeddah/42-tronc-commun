@@ -6,7 +6,7 @@
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 18:01:32 by almeddah          #+#    #+#             */
-/*   Updated: 2025/07/06 04:22:37 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/08 14:44:40 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_command	*create_new_command(t_command *command_list, int i)
 	new_command = malloc(sizeof(t_command));
 	if (!new_command)
 	{
-		printf("command allocation error\n");
+		ft_putstr_fd("command allocation error\n", 2);
 		free_command_list(command_list);
 		return (NULL);
 	}
@@ -29,7 +29,7 @@ t_command	*create_new_command(t_command *command_list, int i)
 	new_command->argv = malloc(sizeof(char *) * (i + 1));
 	if (!new_command->argv)
 	{
-		printf("command arg allocation error\n");
+		ft_putstr_fd("command arg allocation error\n", 2);
 		free_command_list(command_list);
 		return (NULL);
 	}
@@ -87,7 +87,7 @@ int	add_command_to_list(t_data data, int *i, t_command **command_list)
 
 void	*pipe_error(t_command *command_list)
 {
-	printf("pipe error\n");
+	ft_putstr_fd("pipe error\n", 2);
 	free_command_list(command_list);
 	return (NULL);
 }

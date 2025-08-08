@@ -6,7 +6,7 @@
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 15:32:15 by alae              #+#    #+#             */
-/*   Updated: 2025/08/07 15:47:17 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/08 13:01:46 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,23 +42,27 @@ char	*join(char *key, char *value)
 	return (joined);
 }
 
-char	**ft_setenv2(char **envp, char *new_var, int i)
+char	**add_var_to_env(char **envp, char *new_var)
 {
 	char	**new_envp;
 	int		j;
+	int		i;
 
+	i = 0;
+	while (envp[i])
+		i++;
 	new_envp = malloc(sizeof(char *) * (i + 2));
 	if (!new_envp)
 		return (envp);
 	j = 0;
 	while (j < i)
 	{
-		new_envp[j] = envp[j];
+		new_envp[j] = ft_strdup(envp[j]);
 		j++;
 	}
 	new_envp[i] = new_var;
 	new_envp[i + 1] = NULL;
-	free(envp);
+	free_char_list(envp);
 	return (new_envp);
 }
 
@@ -75,7 +79,7 @@ char	**ft_setenv(char **envp, char *key, char *value)
 	while (envp[i])
 	{
 		if (ft_strncmp(envp[i], key, ft_strlen(key)) == 0
-			&& envp[i][ft_strlen(key)] == '=')
+			&& (envp[i][ft_strlen(key)] == '=' || !(envp[i][ft_strlen(key)])))
 		{
 			free(envp[i]);
 			envp[i] = new_var;
@@ -83,7 +87,7 @@ char	**ft_setenv(char **envp, char *key, char *value)
 		}
 		i++;
 	}
-	new_envp = ft_setenv2(envp, new_var, i);
+	new_envp = add_var_to_env(envp, new_var);
 	if (!new_envp)
 		return (envp);
 	return (new_envp);

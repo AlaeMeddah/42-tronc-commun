@@ -6,7 +6,7 @@
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 15:50:23 by alae              #+#    #+#             */
-/*   Updated: 2025/08/07 15:57:03 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/08 14:41:59 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,6 @@ int	builtin_exit(char **args, int exit_code)
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		return (1);
 	}
-	exit_code = atoi(args[1]);
+	exit_code = ft_atoi(args[1]);
 	exit(exit_code % 256);
 }

@@ -6,7 +6,7 @@
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 12:17:26 by alae              #+#    #+#             */
-/*   Updated: 2025/08/07 15:55:41 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/08 15:02:53 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	builtin_echo(char **args)
 
 	i = 1;
 	newline = 1;
-	if (args[i] && strcmp(args[i], "-n") == 0)
+	if (args[i] && ft_strcmp(args[i], "-n") == 0)
 	{
 		newline = 0;
 		i++;

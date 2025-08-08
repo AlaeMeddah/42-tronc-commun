@@ -6,7 +6,7 @@
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 19:25:59 by almeddah          #+#    #+#             */
-/*   Updated: 2025/06/13 10:06:50 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/08 14:56:53 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,10 +90,11 @@ int	stop_heredoc(char *prompt, char *delim, int y)
 {
 	if (!prompt)
 	{
-		printf("bash: warning: here-document at line "
-			"%d delimited by end-of-file (wanted %s)\n",
-			y,
-			delim);
+		ft_putstr_fd("bash: warning: here-document at line ", 2);
+		ft_putnbr_fd(y, 2);
+		ft_putstr_fd(" delimited by end-of-file (wanted ", 2);
+		ft_putstr_fd(delim, 2);
+		ft_putstr_fd(")\n", 2);
 		return (1);
 	}
 	if (!ft_strcmp(prompt, delim))

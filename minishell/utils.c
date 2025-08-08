@@ -6,7 +6,7 @@
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:46:11 by almeddah          #+#    #+#             */
-/*   Updated: 2025/08/07 15:48:01 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/08 15:00:55 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ char	*ft_strncpy(char *src, int n)
 	dest = malloc(sizeof(char) * (n + 1));
 	if (!dest)
 	{
-		printf("dest allocation error\n");
+		ft_putstr_fd("dest allocation error\n", 2);
 		return (NULL);
 	}
 	while (i < n)

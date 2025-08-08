@@ -6,7 +6,7 @@
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:27:05 by almeddah          #+#    #+#             */
-/*   Updated: 2025/08/07 15:24:11 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/08 17:16:45 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@ int	minishell_loop(t_data *data)
 		{
 			(*data).command_list = create_command_list((*data));
 			free_char_list((*data).token_list);
-			(*data).exit_code = setup_cmds((*data).command_list, (*data).envp,
-					(*data).exit_code);
+			(*data).exit_code = setup_cmds(data);
 			free_command_list((*data).command_list);
 		}
 	}

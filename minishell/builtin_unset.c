@@ -6,7 +6,7 @@
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 15:52:36 by alae              #+#    #+#             */
-/*   Updated: 2025/08/07 15:53:04 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/08 14:42:43 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ int	builtin_unset(char **argv, char **envp)
 	while (*argv)
 	{
 		i = 0;
-		len = strlen(*argv);
+		len = ft_strlen(*argv);
 		while (envp[i])
 		{
-			if (strncmp(envp[i], *argv, len) == 0 && envp[i][len] == '=')
+			if (ft_strncmp(envp[i], *argv, len) == 0 && envp[i][len] == '=')
 			{
 				free(envp[i]);
 				while (envp[i + 1])

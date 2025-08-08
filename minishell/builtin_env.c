@@ -6,7 +6,7 @@
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 15:51:44 by alae              #+#    #+#             */
-/*   Updated: 2025/08/07 15:52:15 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/08 14:28:30 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ int	builtin_env(char **envp)
 	i = 0;
 	while (envp[i])
 	{
-		printf("%s\n", envp[i]);
+		if (ft_strchr(envp[i], '='))
+			printf("%s\n", envp[i]);
 		i++;
 	}
 	return (0);
