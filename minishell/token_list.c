@@ -6,7 +6,7 @@
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 13:17:00 by alae              #+#    #+#             */
-/*   Updated: 2025/08/08 15:00:39 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/09 13:02:09 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ char	**create_token_list(char *prompt)
 	int		j;
 	int		k;
 
-	i = 10;
+	i = 25;
 	j = 0;
 	data = malloc(sizeof(char *) * i);
 	if (!data)

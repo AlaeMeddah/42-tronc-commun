@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
+/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 18:04:15 by almeddah          #+#    #+#             */
-/*   Updated: 2025/07/04 13:31:03 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/08/09 13:04:31 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,18 @@ void	setup_signals(void)
 	sa.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &sa, NULL);
 	signal(SIGQUIT, SIG_IGN);
+}
+
+void	norm_function2(char **str, int *i, int *d_quote)
+{
+	if (**str != '"')
+		(*i)++;
+	else
+	{
+		if (!*d_quote)
+			*d_quote = 1;
+		else
+			*d_quote = 0;
+	}
+	(*str)++;
 }

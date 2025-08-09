@@ -6,7 +6,7 @@
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:25:34 by almeddah          #+#    #+#             */
-/*   Updated: 2025/08/08 15:02:58 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/09 13:04:49 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,5 +157,7 @@ void							fork_child(t_command *cmd, t_data *data,
 int								fork_parent(t_command *cmd, int pid,
 									int *prev_fd, int pipefd[2]);
 char							**add_var_to_env(char **envp, char *new_var);
+void							norm_function2(char **str, int *i,
+									int *d_quote);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
+/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 18:08:46 by almeddah          #+#    #+#             */
-/*   Updated: 2025/07/06 17:10:05 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/08/09 13:04:36 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,20 +63,28 @@ int	expanded_token_size(char *str, t_data data)
 			str += j;
 		}
 		else
-		{
-			if (*str != '"')
-				i++;
-			else
-			{
-				if (!d_quote)
-					d_quote = 1;
-				else
-					d_quote = 0;
-			}
-			str++;
-		}
+			norm_function2(&str, &i, &d_quote);
 	}
 	return (i);
+}
+
+void	norm_function1(char **str, int *d_quote, char **result)
+{
+	if (**str == '\'' && !*d_quote)
+	{
+		(*str)++;
+		while (**str != '\'')
+			*(*result)++ = *(*str)++;
+		(*str)++;
+	}
+	else if (**str == '"')
+	{
+		if (!*d_quote)
+			*d_quote = 1;
+		else
+			*d_quote = 0;
+		(*str)++;
+	}
 }
 
 void	test(char *result, char *str, t_data data)
@@ -88,21 +96,8 @@ void	test(char *result, char *str, t_data data)
 	d_quote = 0;
 	while (*str)
 	{
-		if (*str == '\'' && !d_quote)
-		{
-			str++;
-			while (*str != '\'')
-				*result++ = *str++;
-			str++;
-		}
-		else if (*str == '"')
-		{
-			if (!d_quote)
-				d_quote = 1;
-			else
-				d_quote = 0;
-			str++;
-		}
+		if ((*str == '\'' && !d_quote) || *str == '"')
+			norm_function1(&str, &d_quote, &result);
 		else if (*str == '$')
 		{
 			x = 0;
