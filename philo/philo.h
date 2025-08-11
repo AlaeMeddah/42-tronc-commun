@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 16:35:15 by almeddah          #+#    #+#             */
-/*   Updated: 2025/03/26 15:29:00 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/08/11 15:25:35 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int					check_args(int argc, char **argv);
 time_t				get_time_in_ms(struct timeval start);
 int					monitor_creation(pthread_t *observer, t_philo **philos);
 int					philo_creation(t_data *data, t_philo **philos);
-void				init_data(t_data *data, int argc, char **argv);
+int					init_data(t_data *data, int argc, char **argv);
 void				init_philo(t_philo *philo, t_data *data, int i);
 
 #endif

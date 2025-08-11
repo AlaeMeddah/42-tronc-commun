@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 10:59:20 by almeddah          #+#    #+#             */
-/*   Updated: 2025/03/26 15:34:16 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/08/11 16:02:49 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 void	fork_assignement(t_philo *philo, t_data *data)
 {
 	if (philo->id == data->nb_philos)
-		philo->fork_2 = 1;
+		philo->fork_2 = 0;
 	else
-		philo->fork_2 = philo->id + 1;
+		philo->fork_2 = philo->id;
 	if (philo->id % 2 == 0)
 		usleep(100);
 	return ;
@@ -56,17 +56,18 @@ void	*lone_philo(void *arg)
 	data = philo->data;
 	printf("%ld philo %d started thinking\n", get_time_in_ms(data->start),
 		philo->id);
-	pthread_mutex_lock(&data->forks[philo->id]);
+	pthread_mutex_lock(&data->forks[(philo->id) - 1]);
 	printf("%ld philo %d picked up fork %d\n", get_time_in_ms(data->start),
-		philo->id, philo->id);
+		philo->id, (philo->id) - 1);
+	pthread_mutex_unlock(&data->forks[(philo->id) - 1]);
 	return (NULL);
 }
 
 int	philo_creation(t_data *data, t_philo **philos)
 {
 	int		i;
-	void	*(*philo_function)(void *);
 
+	void	*(*philo_function)(void *);
 	philo_function = lone_philo;
 	if (data->nb_philos != 1)
 		philo_function = multiple_philos;

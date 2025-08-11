@@ -6,13 +6,13 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 15:24:38 by almeddah          #+#    #+#             */
-/*   Updated: 2025/03/26 15:29:12 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/08/11 15:25:14 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	init_data(t_data *data, int argc, char **argv)
+int	init_data(t_data *data, int argc, char **argv)
 {
 	data->nb_philos = ft_atoi(argv[1]);
 	data->time_die = ft_atoi(argv[2]);
@@ -24,6 +24,12 @@ void	init_data(t_data *data, int argc, char **argv)
 		data->nb_eat = ft_atoi(argv[5]);
 	else
 		data->nb_eat = -1;
+	if (!data->nb_philos || !data->time_die || !data->nb_eat)
+	{
+		printf("Error with arg value");
+		return (0);
+	}
+	return (1);
 }
 
 void	init_philo(t_philo *philo, t_data *data, int i)

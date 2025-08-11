@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 10:40:30 by almeddah          #+#    #+#             */
-/*   Updated: 2025/03/26 15:29:32 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/08/11 15:27:38 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	clean_up(t_data *data, t_philo **philos)
 	int	i;
 
 	i = -1;
-	while (++i < data->nb_philos + 1)
+	while (++i < data->nb_philos)
 		pthread_mutex_destroy(&data->forks[i]);
 	free(data->forks);
 	i = -1;
@@ -30,7 +30,7 @@ void	clean_up(t_data *data, t_philo **philos)
 int	mem_alloc(t_data *data, t_philo ***philos)
 {
 	*philos = malloc(data->nb_philos * sizeof(t_philo *));
-	data->forks = malloc((data->nb_philos + 1) * sizeof(pthread_mutex_t));
+	data->forks = malloc((data->nb_philos) * sizeof(pthread_mutex_t));
 	if (!(*philos) || !data->forks)
 	{
 		perror("Memory allocation failed");
@@ -44,7 +44,7 @@ void	mutex_init(t_data *data)
 	int	i;
 
 	i = -1;
-	while (++i < data->nb_philos + 1)
+	while (++i < data->nb_philos)
 		pthread_mutex_init(&data->forks[i], NULL);
 	pthread_mutex_init(&data->lock, NULL);
 	return ;
@@ -79,7 +79,8 @@ int	main(int argc, char **argv)
 
 	if (!check_args(argc, argv))
 		return (0);
-	init_data(&data, argc, argv);
+	if (!init_data(&data, argc, argv))
+		return (0);
 	if (!mem_alloc(&data, &philos))
 		return (0);
 	mutex_init(&data);

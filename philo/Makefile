@@ -5,7 +5,7 @@ SRCS = main.c routine.c utils.c philo.c monitor.c init.c
 OBJS = $(SRCS:.c=.o)
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror #-fsanitize=leak -fsanitize=thread
+CFLAGS = -Wall -Wextra -Werror -fsanitize=thread #-fsanitize=leak
 
 all: $(NAME)
 
