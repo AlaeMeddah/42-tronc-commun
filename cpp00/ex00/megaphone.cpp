@@ -10,8 +10,6 @@ int main(int argc, char **argv)
 			for (int j = 0; argv[i][j] != '\0'; j++)
 				argv[i][j] = (char)toupper(argv[i][j]);
 			std::cout << argv[i];
-			if (argv[i] != NULL)
-				std::cout << " ";
 		}
 		std::cout << std::endl;
 	}
