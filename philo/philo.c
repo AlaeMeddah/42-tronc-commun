@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 10:59:20 by almeddah          #+#    #+#             */
-/*   Updated: 2025/08/11 16:02:49 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/08/11 17:47:43 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,20 @@
 
 void	fork_assignement(t_philo *philo, t_data *data)
 {
-	if (philo->id == data->nb_philos)
-		philo->fork_2 = 0;
-	else
-		philo->fork_2 = philo->id;
-	if (philo->id % 2 == 0)
-		usleep(100);
+	philo->fork_1 = min((philo->id) - 1, philo->id % data->nb_philos);
+	philo->fork_2 = max((philo->id) - 1, philo->id % data->nb_philos);
 	return ;
+}
+
+int	routine_order(t_philo *philo, t_data *data)
+{
+	if (!thinking(philo, data))
+		return (0);
+	if (!eating(philo, data))
+		return (0);
+	if (!sleeping(philo, data))
+		return (0);
+	return (1);
 }
 
 void	*multiple_philos(void *arg)
@@ -30,19 +37,22 @@ void	*multiple_philos(void *arg)
 
 	philo = (t_philo *)arg;
 	data = philo->data;
+	pthread_mutex_lock(&data->lock);
 	printf("%ld philo %d started thinking\n", get_time_in_ms(data->start),
 		philo->id);
+	pthread_mutex_unlock(&data->lock);
 	fork_assignement(philo, data);
 	while (1)
 	{
-		if (!thinking(philo, data))
+		if (!routine_order(philo, data))
 			return (NULL);
-		if (!eating(philo, data))
-			return (NULL);
-		if (!sleeping(philo, data))
-			return (NULL);
+		pthread_mutex_lock(&data->lock);
 		if (data->end_simu)
+		{
+			pthread_mutex_unlock(&data->lock);
 			return (NULL);
+		}
+		pthread_mutex_unlock(&data->lock);
 	}
 	return (NULL);
 }

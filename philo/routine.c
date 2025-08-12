@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 16:35:22 by almeddah          #+#    #+#             */
-/*   Updated: 2025/08/11 16:03:31 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/08/11 16:43:12 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ void	print_function(char *str, t_data *data, t_philo *philo)
 
 int	thinking(t_philo *philo, t_data *data)
 {
-	pthread_mutex_lock(&data->forks[(philo->id) - 1]);
+	pthread_mutex_lock(&data->forks[philo->fork_1]);
 	pthread_mutex_lock(&data->lock);
 	if (!data->end_simu)
 		printf("%ld philo %d picked up fork %d\n", get_time_in_ms(data->start),
-			philo->id, (philo->id) - 1);
+			philo->id, philo->fork_1);
 	pthread_mutex_unlock(&data->lock);
 	pthread_mutex_lock(&data->forks[philo->fork_2]);
 	pthread_mutex_lock(&data->lock);
@@ -58,7 +58,7 @@ int	eating(t_philo *philo, t_data *data)
 	while (get_time_in_ms(philo->last_eat) < data->time_eat)
 		usleep(50);
 	pthread_mutex_unlock(&data->forks[philo->fork_2]);
-	pthread_mutex_unlock(&data->forks[(philo->id) - 1]);
+	pthread_mutex_unlock(&data->forks[philo->fork_1]);
 	return (1);
 }
 

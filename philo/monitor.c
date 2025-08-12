@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 15:09:46 by almeddah          #+#    #+#             */
-/*   Updated: 2025/03/26 15:20:26 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/08/11 16:23:58 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,13 @@ void	*monitor_function(void *args)
 		while (++i < data->nb_philos)
 		{
 			check_death(philos[i]);
+			pthread_mutex_lock(&data->lock);
 			if (data->end_simu)
+			{
+				pthread_mutex_unlock(&data->lock);
 				return (NULL);
+			}
+			pthread_mutex_unlock(&data->lock);
 		}
 	}
 	return (NULL);

@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 15:24:38 by almeddah          #+#    #+#             */
-/*   Updated: 2025/08/11 15:25:14 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/08/11 16:46:08 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,18 @@ void	init_philo(t_philo *philo, t_data *data, int i)
 	philo->nb_eaten = 0;
 	philo->last_eat = data->start;
 	philo->data = data;
+}
+
+int	min(int i, int j)
+{
+	if (i <= j)
+		return (i);
+	return (j);
+}
+
+int	max(int i, int j)
+{
+	if (i >= j)
+		return (i);
+	return (j);
 }

@@ -6,7 +6,7 @@
 /*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 16:35:15 by almeddah          #+#    #+#             */
-/*   Updated: 2025/08/11 15:25:35 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/08/11 16:46:35 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_data
 typedef struct s_philo
 {
 	int				id;
+	int				fork_1;
 	int				fork_2;
 	int				nb_eaten;
 	struct timeval	last_eat;
@@ -54,5 +55,7 @@ int					monitor_creation(pthread_t *observer, t_philo **philos);
 int					philo_creation(t_data *data, t_philo **philos);
 int					init_data(t_data *data, int argc, char **argv);
 void				init_philo(t_philo *philo, t_data *data, int i);
+int					min(int i, int j);
+int					max(int i, int j);
 
 #endif
