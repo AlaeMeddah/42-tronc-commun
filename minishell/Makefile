@@ -16,9 +16,9 @@ INCLUDE_DIR = include
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g -I$(INCLUDE_DIR)
+
 all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT)
