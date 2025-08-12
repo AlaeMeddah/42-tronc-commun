@@ -3,14 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 15:54:37 by alae              #+#    #+#             */
-/*   Updated: 2025/08/08 15:18:51 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/11 18:55:47 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	*transform(char *arg, char **envp)
+{
+	char	*target;
+
+	target = arg;
+	if (*arg == '~')
+	{
+		arg++;
+		target = ft_strjoin(ft_getenv(envp, "HOME"), arg);
+	}
+	return (target);
+}
 
 char	*set_target(char *old, char **envp, char *oldpwd, char **args)
 {
@@ -18,7 +31,7 @@ char	*set_target(char *old, char **envp, char *oldpwd, char **args)
 
 	target = NULL;
 	if (!args[1])
-		target = ft_getenv(envp, "HOME");
+		target = ft_strdup(ft_getenv(envp, "HOME"));
 	else if (ft_strcmp(args[1], "-") == 0)
 	{
 		if (!old)
@@ -27,10 +40,10 @@ char	*set_target(char *old, char **envp, char *oldpwd, char **args)
 			free(oldpwd);
 			return (NULL);
 		}
-		target = old;
+		target = ft_strdup(old);
 	}
 	else
-		target = args[1];
+		target = transform(args[1], envp);
 	if (!target)
 	{
 		ft_putstr_fd("minishell: cd: HOME not set\n", 2);
@@ -54,8 +67,8 @@ int	builtin_cd(char **args, char **envp)
 	char	*old;
 	char	*newpwd;
 
-	if (args[2])
-		return (ft_putstr_fd("bash: cd: too many arguments\n", 2), 1);
+	if (args[1] && args[2])
+		return (ft_putstr_fd("minishell: cd: too many arguments\n", 2), 1);
 	oldpwd = getcwd(NULL, 0);
 	old = ft_getenv(envp, "OLDPWD");
 	target = set_target(old, envp, oldpwd, args);
@@ -69,6 +82,7 @@ int	builtin_cd(char **args, char **envp)
 		ft_setenv(envp, "PWD", newpwd);
 	if (args[1] && ft_strcmp(args[1], "-") == 0)
 		printf("%s\n", newpwd);
+	free(target);
 	free(oldpwd);
 	free(newpwd);
 	return (0);

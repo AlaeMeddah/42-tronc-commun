@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 13:40:27 by alae              #+#    #+#             */
-/*   Updated: 2025/08/08 15:55:37 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/12 17:39:30 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,8 @@ int	setup_out_redirect(t_command *cmd)
 			fd = open(out->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd == -1)
 			return (perror(out->file), 0);
-		if (ft_strcmp(cmd->argv[0], "echo") != 0)
-		{
-			if (dup2(fd, STDOUT_FILENO) == -1)
-				return (perror("dup2"), close(fd), 0);
-		}
+		if (dup2(fd, STDOUT_FILENO) == -1)
+			return (perror("dup2"), close(fd), 0);
 		close(fd);
 		out = out->next;
 	}

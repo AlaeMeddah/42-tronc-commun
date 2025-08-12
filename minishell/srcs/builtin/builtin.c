@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 13:44:25 by alae              #+#    #+#             */
-/*   Updated: 2025/08/08 14:43:42 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/12 17:39:31 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,8 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-int	exec_builtin(t_command *cmd, char ***envp, int in_fork, int exit_code)
+int	norm_builtin(t_command *cmd, char ***envp, int in_fork, int exit_code)
 {
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
-	if (!in_fork && !setup_redirect(cmd))
-		return (1);
 	if (ft_strcmp(cmd->argv[0], "echo") == 0)
 		return (builtin_echo(cmd->argv));
 	if (ft_strcmp(cmd->argv[0], "cd") == 0)
@@ -58,4 +54,20 @@ int	exec_builtin(t_command *cmd, char ***envp, int in_fork, int exit_code)
 		return (builtin_exit(cmd->argv, exit_code));
 	}
 	return (1);
+}
+
+int	exec_builtin(t_command *cmd, char ***envp, int in_fork, int exit_code)
+{
+	int	return_value;
+	int	saved_stdin;
+
+	saved_stdin = dup(STDOUT_FILENO);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+	if (!in_fork && !setup_redirect(cmd))
+		return (1);
+	return_value = norm_builtin(cmd, envp, in_fork, exit_code);
+	dup2(saved_stdin, STDOUT_FILENO);
+	close(saved_stdin);
+	return (return_value);
 }

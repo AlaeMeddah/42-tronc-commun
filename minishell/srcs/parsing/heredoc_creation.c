@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_creation.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 19:25:59 by almeddah          #+#    #+#             */
-/*   Updated: 2025/08/08 14:56:53 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/11 18:42:43 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int	stop_heredoc(char *prompt, char *delim, int y)
 {
 	if (!prompt)
 	{
-		ft_putstr_fd("bash: warning: here-document at line ", 2);
+		ft_putstr_fd("minishell: warning: here-document at line ", 2);
 		ft_putnbr_fd(y, 2);
 		ft_putstr_fd(" delimited by end-of-file (wanted ", 2);
 		ft_putstr_fd(delim, 2);

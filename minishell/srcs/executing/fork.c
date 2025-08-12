@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fork.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 17:20:02 by alae              #+#    #+#             */
-/*   Updated: 2025/08/08 16:37:38 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/11 18:42:43 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	check_cmd(t_command *cmd)
 	{
 		if (S_ISDIR(st.st_mode))
 		{
-			ft_putstr_fd("bash: ", 2);
+			ft_putstr_fd("minishell: ", 2);
 			ft_putstr_fd(cmd->argv[0], 2);
 			ft_putstr_fd(": Is a directory\n", 2);
 			exit(126);

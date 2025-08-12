@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:25:34 by almeddah          #+#    #+#             */
-/*   Updated: 2025/08/09 13:04:49 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/12 17:00:55 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 # define MINISHELL_H
 
 # define _GNU_SOURCE
+# include "../libft/libft.h"
 # include "fcntl.h"
-# include "libft/libft.h"
 # include "readline/history.h"
 # include "readline/readline.h"
 # include "signal.h"
@@ -63,23 +63,6 @@ typedef struct s_data
 	t_command					*command_list;
 }								t_data;
 
-// typedef struct s_env
-// {
-// 	char						*key;
-// 	char						*value;
-// 	struct s_env				*next;
-// }								t_env;
-
-// typedef struct s_path
-// {
-// 	char						**allpath;
-// 	char						**s_cmd;
-// 	char						*path_part;
-// 	char						*exec;
-// 	char						*tmp;
-// 	char						*trimmed_cmd;
-// }								t_path;
-
 void							free_command_list(t_command *cmd_list);
 void							free_char_list(char **data);
 int								ft_strcmp(char *s1, char *s2);
@@ -98,42 +81,6 @@ int								is_redirection(char *str);
 void							setup_signals(void);
 t_command						*create_command_list(t_data data);
 int								redirection_error(char **data, int i);
-
-// int								ft_echo(char **args);
-// int								ft_pwd(void);
-// int								ft_cd(char **args, t_env **env);
-// int								ft_exit(char **args, int in_fork);
-// int								ft_env(t_env *env);
-// int								ft_export(char **args, t_env **env);
-// int								is_valid_identifier(char *key);
-// t_env							*find_env(t_env *env, char *key);
-// int								env_size(t_env *env);
-// t_env							**env_to_array(t_env *env, int *size);
-// void							sort_env_array(t_env **array, int size);
-// void							print_export_line(t_env *env);
-// void							print_export(t_env *env);
-// int								ft_unset(char **args, t_env **env);
-
-// int								execute_commands(t_command *cmd,
-//									t_env **env);
-// t_env							*env_new(char *key, char *value);
-// t_env							*env_to_list(char **envp);
-// char							*ft_get_path(char *cmd, char **env);
-// char							*my_getenv(char **env);
-// void							exec_external(char **argv, char **env);
-// void							exit_handler(int code);
-// int								open_file(char *filename, int type,
-//									int *error);
-// void							ft_free_tab(char **tab);
-// void							write_error(char *msg);
-// char							**convert_env(t_env *env);
-// int								exec_builtin(char **argv, t_env **env,
-// 									int infork);
-// int								is_builtin(char *cmd);
-// char							*ft_strjoin_free(char *s1, char *s2);
-
-// void							display_command_list(t_command *cmd_list);
-// void							print_data(char **data);
 
 int								setup_cmds(t_data *data);
 int								builtin_echo(char **argv);
