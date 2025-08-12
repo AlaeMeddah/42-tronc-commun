@@ -6,7 +6,7 @@
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:18:32 by alae              #+#    #+#             */
-/*   Updated: 2025/08/08 14:55:55 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/12 18:42:27 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,7 @@ int	cmd_loop(t_data *data, pid_t *pid, pid_t *last_pid, t_command *cmd)
 	{
 		if (is_builtin(cmd->argv[0]) && !cmd->next && prev_fd == -1)
 		{
-			(*data).exit_code = exec_builtin(cmd, &(*data).envp, 0,
-					(*data).exit_code);
+			(*data).exit_code = exec_builtin(cmd, &(*data).envp, 0, data);
 			return ((*data).exit_code);
 		}
 		if (cmd->next && pipe(pipefd) == -1)

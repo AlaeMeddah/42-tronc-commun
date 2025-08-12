@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
+/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:25:34 by almeddah          #+#    #+#             */
-/*   Updated: 2025/08/12 17:00:55 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/08/12 19:03:01 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,13 +89,13 @@ int								builtin_pwd(void);
 int								builtin_export(char **argv, char ***envp);
 int								builtin_unset(char **argv, char **envp);
 int								builtin_env(char **envp);
-int								builtin_exit(char **args, int exit_code);
+int								builtin_exit(char **args, t_data *data, int fd);
 char							**ft_setenv(char **envp, char *key,
 									char *value);
 char							*ft_getenv(char **envp, char *name);
 int								setup_redirect(t_command *cmd);
 int								exec_builtin(t_command *cmd, char ***envp,
-									int in_fork, int exit_code);
+									int in_fork, t_data *data);
 
 int								is_builtin(char *cmd);
 char							*ft_find_path(char *cmd, char **envp);

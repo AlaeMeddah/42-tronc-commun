@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
+/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 13:44:25 by alae              #+#    #+#             */
-/*   Updated: 2025/08/12 17:39:31 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/08/12 19:00:09 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-int	norm_builtin(t_command *cmd, char ***envp, int in_fork, int exit_code)
+int	norm_builtin(t_command *cmd, char ***envp, int fd, t_data *data)
 {
 	if (ft_strcmp(cmd->argv[0], "echo") == 0)
 		return (builtin_echo(cmd->argv));
@@ -48,15 +48,11 @@ int	norm_builtin(t_command *cmd, char ***envp, int in_fork, int exit_code)
 	if (ft_strcmp(cmd->argv[0], "env") == 0)
 		return (builtin_env(*envp));
 	if (ft_strcmp(cmd->argv[0], "exit") == 0)
-	{
-		if (!in_fork)
-			ft_putstr_fd("exit\n", 2);
-		return (builtin_exit(cmd->argv, exit_code));
-	}
+		return (builtin_exit(cmd->argv, data, fd));
 	return (1);
 }
 
-int	exec_builtin(t_command *cmd, char ***envp, int in_fork, int exit_code)
+int	exec_builtin(t_command *cmd, char ***envp, int in_fork, t_data *data)
 {
 	int	return_value;
 	int	saved_stdin;
@@ -66,7 +62,9 @@ int	exec_builtin(t_command *cmd, char ***envp, int in_fork, int exit_code)
 	signal(SIGQUIT, SIG_DFL);
 	if (!in_fork && !setup_redirect(cmd))
 		return (1);
-	return_value = norm_builtin(cmd, envp, in_fork, exit_code);
+	if (!in_fork && ft_strcmp(cmd->argv[0], "exit") == 0)
+		ft_putstr_fd("exit\n", 2);
+	return_value = norm_builtin(cmd, envp, saved_stdin, data);
 	dup2(saved_stdin, STDOUT_FILENO);
 	close(saved_stdin);
 	return (return_value);

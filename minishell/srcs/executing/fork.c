@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fork.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
+/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 17:20:02 by alae              #+#    #+#             */
-/*   Updated: 2025/08/11 18:42:43 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/08/12 18:42:24 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,14 @@ void	check_cmd(t_command *cmd)
 	}
 }
 
-int	exec_cmd(t_command *cmd, char ***envp, int exit_code)
+int	exec_cmd(t_command *cmd, char ***envp, t_data *data)
 {
 	char	*path;
 
 	if (!setup_redirect(cmd))
 		exit(1);
 	if (is_builtin(cmd->argv[0]))
-		exit(exec_builtin(cmd, envp, 1, exit_code));
+		exit(exec_builtin(cmd, envp, 1, data));
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	check_cmd(cmd);
@@ -81,5 +81,5 @@ void	fork_child(t_command *cmd, t_data *data, int *prev_fd, int pipefd[2])
 		close(pipefd[0]);
 		close(pipefd[1]);
 	}
-	exec_cmd(cmd, &(*data).envp, (*data).exit_code);
+	exec_cmd(cmd, &(*data).envp, data);
 }

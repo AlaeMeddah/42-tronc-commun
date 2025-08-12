@@ -6,7 +6,7 @@
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 15:50:23 by alae              #+#    #+#             */
-/*   Updated: 2025/08/08 14:41:59 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/12 19:10:16 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,22 +32,37 @@ int	is_numeric(char *str)
 	return (1);
 }
 
-int	builtin_exit(char **args, int exit_code)
+void	clean_up(int fd, t_data *data)
 {
+	dup2(fd, STDOUT_FILENO);
+	close(fd);
+	free_char_list((*data).envp);
+	free_command_list((*data).command_list);
+}
+
+int	builtin_exit(char **args, t_data *data, int fd)
+{
+	int	exit_code;
+
+	if (args[1] && args[2])
+	{
+		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
+		return (1);
+	}
 	if (!args[1])
-		exit(exit_code);
+	{
+		clean_up(fd, data);
+		exit((*data).exit_code);
+	}
 	if (!is_numeric(args[1]))
 	{
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(args[1], 2);
 		ft_putstr_fd(": numeric argument required\n", 2);
+		clean_up(fd, data);
 		exit(2);
 	}
-	if (args[2])
-	{
-		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
-		return (1);
-	}
-	exit_code = ft_atoi(args[1]);
-	exit(exit_code % 256);
+	exit_code = ft_atoi(args[1]) % 256;
+	clean_up(fd, data);
+	exit(exit_code);
 }
