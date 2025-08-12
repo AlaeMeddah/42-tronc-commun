@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
+/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 15:54:37 by alae              #+#    #+#             */
-/*   Updated: 2025/08/11 18:55:47 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/08/12 19:55:27 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,13 @@ char	*transform(char *arg, char **envp)
 {
 	char	*target;
 
-	target = arg;
 	if (*arg == '~')
 	{
 		arg++;
 		target = ft_strjoin(ft_getenv(envp, "HOME"), arg);
 	}
+	else
+		target = ft_strdup(arg);
 	return (target);
 }
 
