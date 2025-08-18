@@ -1,6 +1,6 @@
 NAME = BraiiiiiiinnnzzzZ
 
-SRC = main.cpp newZombie.cpp randomChum.cpp Zombie.cpp
+SRC = main.cpp Zombie.cpp zombieHorde.cpp
 
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98

@@ -12,6 +12,7 @@ class Zombie
         std::string Name;
 
     public:
+        Zombie() {}
         Zombie(std::string Name)
         {
             this->Name = Name;
@@ -20,7 +21,7 @@ class Zombie
 		{
 			std::cout << "Destructor called for " << Name << std::endl;
 		}
-
+        void setname(std::string Name);
 		void announce();
 };
 

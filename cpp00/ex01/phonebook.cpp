@@ -36,7 +36,6 @@ std::string truncate(std::string str, std::size_t n)
 void PhoneBook::SEARCH()
 {
     std::string input;
-    std::stringstream ss;
     int index;
 
     std::cout << std::setw(10) << "Index" << "|";

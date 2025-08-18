@@ -1,6 +1,6 @@
-NAME = BraiiiiiiinnnzzzZ
+NAME = ex03
 
-SRC = main.cpp newZombie.cpp randomChum.cpp Zombie.cpp
+SRC = main.cpp HumanA.cpp HumanB.cpp Weapon.cpp
 
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
