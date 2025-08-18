@@ -6,7 +6,7 @@
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 18:01:32 by almeddah          #+#    #+#             */
-/*   Updated: 2025/08/18 21:17:27 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/19 00:29:56 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,8 @@ int	handle_new_command(t_data data, int *i, t_command *new_command)
 			new_command->argv[j] = expand_token(data.token_list[(*i)++], data);
 			j++;
 		}
+		new_command->argv[j] = NULL;
 	}
-	new_command->argv[j] = NULL;
 	return (1);
 }
 
@@ -77,7 +77,7 @@ int	add_command_to_list(t_data data, int *i, t_command **command_list)
 	*i = 0;
 	if (!handle_new_command(data, i, new_command))
 	{
-		free_command_list(*command_list);
+		free_command_list(new_command);
 		return (0);
 	}
 	ft_add_back((void **)command_list, new_command);
