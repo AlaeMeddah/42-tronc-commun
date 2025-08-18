@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_creation.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
+/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 19:25:59 by almeddah          #+#    #+#             */
-/*   Updated: 2025/08/11 18:42:43 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/08/18 20:15:44 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,19 @@ char	*heredoc_file_creation(void)
 
 void	paste_to_heredoc(char *str, int quote, int fd, t_data data)
 {
-	int	i;
+	int		i;
+	char	*expanded;
 
 	i = 0;
 	while (str[i])
 	{
 		if (str[i] == '$' && !quote)
-			ft_putstr_fd(expand_variable(str + i, data, &i), fd);
+		{
+			expanded = expand_variable(str + i, data, &i);
+			ft_putstr_fd(expanded, fd);
+			if (*(str + 1) == '?')
+				free(expanded);
+		}
 		else
 		{
 			ft_putchar_fd(str[i], fd);

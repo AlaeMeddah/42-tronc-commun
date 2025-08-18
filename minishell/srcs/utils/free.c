@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
+/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:37:57 by almeddah          #+#    #+#             */
-/*   Updated: 2025/05/13 17:42:05 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/08/18 18:08:05 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void	free_input_redirect(t_input_redirect *input_redirect)
 	while (input_redirect)
 	{
 		tmp = input_redirect;
+		if (input_redirect->heredoc)
+			unlink(input_redirect->file);
 		if (input_redirect->file)
 			free(input_redirect->file);
 		input_redirect = input_redirect->next;

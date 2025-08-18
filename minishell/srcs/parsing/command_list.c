@@ -6,7 +6,7 @@
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 18:01:32 by almeddah          #+#    #+#             */
-/*   Updated: 2025/08/08 14:44:40 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/18 21:17:27 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,7 @@ int	handle_new_command(t_data data, int *i, t_command *new_command)
 		else
 		{
 			new_command->argv[j] = expand_token(data.token_list[(*i)++], data);
-			if (new_command->argv[j])
-				j++;
+			j++;
 		}
 	}
 	new_command->argv[j] = NULL;

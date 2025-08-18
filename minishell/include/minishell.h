@@ -6,7 +6,7 @@
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:25:34 by almeddah          #+#    #+#             */
-/*   Updated: 2025/08/12 19:03:01 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/18 20:40:11 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,13 +98,17 @@ int								exec_builtin(t_command *cmd, char ***envp,
 									int in_fork, t_data *data);
 
 int								is_builtin(char *cmd);
-char							*ft_find_path(char *cmd, char **envp);
+char							*ft_find_path(char *cmd, char ***envp,
+									t_data *data);
 void							fork_child(t_command *cmd, t_data *data,
 									int *prev_fd, int pipefd[2]);
 int								fork_parent(t_command *cmd, int pid,
 									int *prev_fd, int pipefd[2]);
 char							**add_var_to_env(char **envp, char *new_var);
+void							norm_function1(char **str, int *d_quote,
+									char **result);
 void							norm_function2(char **str, int *i,
 									int *d_quote);
+void							norm_function3(int *i, char **str, t_data data);
 
 #endif

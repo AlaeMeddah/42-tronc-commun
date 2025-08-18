@@ -7,7 +7,7 @@ SRCS_FILES = builtin/builtin_cd.c builtin/builtin_echo.c builtin/builtin_env.c \
 			executing/exec.c executing/find_path.c executing/fork.c \
 			executing/redir.c parsing/token_list.c parsing/redirection.c \
 			parsing/expansion.c parsing/command_list.c parsing/heredoc_creation.c \
-			utils/free.c utils/signals.c utils/utils.c main.c
+			utils/free.c utils/signals.c utils/norm_function.c utils/utils.c main.c 
 SRCS = $(addprefix $(SRC_DIR), $(SRCS_FILES))
 OBJS = $(SRCS:.c=.o)
 

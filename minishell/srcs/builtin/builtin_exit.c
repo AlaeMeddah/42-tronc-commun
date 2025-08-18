@@ -6,7 +6,7 @@
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 15:50:23 by alae              #+#    #+#             */
-/*   Updated: 2025/08/12 19:10:16 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/18 19:09:35 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	is_numeric(char *str)
 	return (1);
 }
 
-void	clean_up(int fd, t_data *data)
+static void	clean_up(int fd, t_data *data)
 {
 	dup2(fd, STDOUT_FILENO);
 	close(fd);

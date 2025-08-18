@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
+/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:27:05 by almeddah          #+#    #+#             */
-/*   Updated: 2025/08/12 17:48:07 by almeddah         ###   ########.fr       */
+/*   Updated: 2025/08/18 21:27:29 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,15 @@ int	minishell_loop(t_data *data)
 		{
 			(*data).command_list = create_command_list((*data));
 			free_char_list((*data).token_list);
-			(*data).exit_code = setup_cmds(data);
-			free_command_list((*data).command_list);
+			if ((*data).command_list)
+				(*data).exit_code = setup_cmds(data);
+			if ((*data).command_list)
+				free_command_list((*data).command_list);
+			else
+				(*data).exit_code = 2;
 		}
+		else
+			(*data).exit_code = 2;
 	}
 	free(prompt);
 	return (0);

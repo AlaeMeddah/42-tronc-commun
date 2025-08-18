@@ -24,7 +24,7 @@ int	builtin_unset(char **argv, char **envp)
 		while (envp[i])
 		{
 			if (ft_strncmp(envp[i], *argv, len) == 0 && (envp[i][len] == '='
-					|| envp[i][len] == '\0'))
+				|| envp[i][len] == '\0'))
 			{
 				free(envp[i]);
 				while (envp[i + 1])

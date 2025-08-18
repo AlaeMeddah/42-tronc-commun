@@ -6,7 +6,7 @@
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 18:08:46 by almeddah          #+#    #+#             */
-/*   Updated: 2025/08/09 13:04:36 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/18 20:39:27 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ char	*expand_variable(char *str, t_data data, int *i)
 int	expanded_token_size(char *str, t_data data)
 {
 	int	i;
-	int	j;
 	int	d_quote;
 
 	d_quote = 0;
@@ -57,34 +56,11 @@ int	expanded_token_size(char *str, t_data data)
 			str += nb_quoted_char(str) + 1;
 		}
 		else if (*str == '$')
-		{
-			j = 0;
-			i += ft_strlen(expand_variable(str, data, &j));
-			str += j;
-		}
+			norm_function3(&i, &str, data);
 		else
 			norm_function2(&str, &i, &d_quote);
 	}
 	return (i);
-}
-
-void	norm_function1(char **str, int *d_quote, char **result)
-{
-	if (**str == '\'' && !*d_quote)
-	{
-		(*str)++;
-		while (**str != '\'')
-			*(*result)++ = *(*str)++;
-		(*str)++;
-	}
-	else if (**str == '"')
-	{
-		if (!*d_quote)
-			*d_quote = 1;
-		else
-			*d_quote = 0;
-		(*str)++;
-	}
 }
 
 void	test(char *result, char *str, t_data data)
@@ -92,6 +68,7 @@ void	test(char *result, char *str, t_data data)
 	char	*expanded;
 	int		x;
 	int		d_quote;
+	int		y;
 
 	d_quote = 0;
 	while (*str)
@@ -101,9 +78,12 @@ void	test(char *result, char *str, t_data data)
 		else if (*str == '$')
 		{
 			x = 0;
+			y = 0;
 			expanded = expand_variable(str, data, &x);
-			while (*expanded)
-				*result++ = *expanded++;
+			while (expanded[y])
+				*result++ = expanded[y++];
+			if (*(str + 1) == '?')
+				free(expanded);
 			str += x;
 		}
 		else

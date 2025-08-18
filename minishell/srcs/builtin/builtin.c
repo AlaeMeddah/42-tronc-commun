@@ -6,7 +6,7 @@
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 13:44:25 by alae              #+#    #+#             */
-/*   Updated: 2025/08/12 19:00:09 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/18 18:29:18 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,5 +67,10 @@ int	exec_builtin(t_command *cmd, char ***envp, int in_fork, t_data *data)
 	return_value = norm_builtin(cmd, envp, saved_stdin, data);
 	dup2(saved_stdin, STDOUT_FILENO);
 	close(saved_stdin);
+	if (in_fork)
+	{
+		free_command_list((*data).command_list);
+		free_char_list(*envp);
+	}
 	return (return_value);
 }
