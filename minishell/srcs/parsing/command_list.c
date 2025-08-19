@@ -6,7 +6,7 @@
 /*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 18:01:32 by almeddah          #+#    #+#             */
-/*   Updated: 2025/08/19 00:29:56 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/19 19:36:17 by alae             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,10 @@ t_command	*create_command_list(t_data data)
 		if (!ft_strcmp(*data.token_list, "|"))
 			return (pipe_error(command_list));
 		if (!add_command_to_list(data, &i, &command_list))
+		{
+			free_command_list(command_list);
 			return (NULL);
+		}
 		data.token_list += i;
 		if (*data.token_list)
 		{
