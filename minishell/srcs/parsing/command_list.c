@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_list.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alae <alae@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: almeddah <almeddah@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 18:01:32 by almeddah          #+#    #+#             */
-/*   Updated: 2025/08/19 19:36:17 by alae             ###   ########.fr       */
+/*   Updated: 2025/08/22 14:08:13 by almeddah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ t_command	*create_new_command(t_command *command_list, int i)
 		free_command_list(command_list);
 		return (NULL);
 	}
+	new_command->argv[0] = NULL;
 	return (new_command);
 }
 
